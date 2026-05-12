@@ -1,0 +1,208 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ChecadorSSSD.Views.PersonasView"
+             x:DataType="vm:PersonasViewModel"
+             xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+             xmlns:models="clr-namespace:ChecadorSSSD.Models"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+    <Grid ColumnDefinitions="*,350" Margin="24">
+        <!-- Lista de personas -->
+        <Grid Grid.Column="0" RowDefinitions="Auto,*" Margin="0,0,24,0">
+            <Grid Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Text="Personas" FontSize="24" FontWeight="Bold" Foreground="#FFFFFF"/>
+                    <TextBlock Text="Lista de usuarios registrados en el sistema" FontSize="12" Foreground="#A6A6B0"/>
+                </StackPanel>
+                <TextBox Grid.Column="1"
+                         Text="{Binding Busqueda}"
+                         PlaceholderText="Buscar..."
+                         Width="150"
+                         Height="32"
+                         VerticalContentAlignment="Center"
+                         Background="#25253A"
+                         Foreground="#FFFFFF"
+                         CaretBrush="#FFFFFF"
+                         CornerRadius="6"
+                         Padding="8,0"
+                         FontSize="12"/>
+            </Grid>
+
+            <!-- Lista -->
+            <Border Grid.Row="1" Background="#1E1E2E" CornerRadius="12" Padding="16">
+                <ListBox ItemsSource="{Binding Personas}"
+                        SelectedItem="{Binding PersonaSeleccionada}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="models:Personas">
+                            <Border Background="#25253A" CornerRadius="8" Padding="12,8" Margin="0,4">
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <StackPanel Grid.Column="0" Spacing="2">
+                                        <TextBlock Text="{Binding Nombre}"
+                                                   Foreground="#FFFFFF"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="14"/>
+                                        <TextBlock Text="{Binding Apellido}"
+                                                   Foreground="#A6A6B0"
+                                                   FontSize="12"/>
+                                        <TextBlock Text="{Binding Matricula}"
+                                                   Foreground="#666680"
+                                                   FontSize="11"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Background="#4CAF50"
+                                            CornerRadius="4"
+                                            Padding="8,2"
+                                            Margin="8,0"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding TipoPersona}"
+                                                   Foreground="#FFFFFF"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                        <Button Content="✏️"
+                                                Command="{Binding $parent[ListBox].DataContext.EditarCommand}"
+                                                Height="28"
+                                                Width="28"
+                                                Background="Transparent"
+                                                Foreground="#FFFFFF"
+                                                FontSize="10"
+                                                Padding="0"
+                                                CornerRadius="4"/>
+                                        <Button Content="🗑️"
+                                                Command="{Binding $parent[ListBox].DataContext.EliminarCommand}"
+                                                Height="28"
+                                                Width="28"
+                                                Background="Transparent"
+                                                Foreground="#F44336"
+                                                FontSize="10"
+                                                Padding="0"
+                                                CornerRadius="4"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Grid>
+
+        <!-- Formulario de edición SIEMPRE VISIBLE -->
+        <Grid Grid.Column="1">
+            <Border Background="#1E1E2E"
+                    CornerRadius="12"
+                    Padding="20">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding TituloFormulario}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="#FFFFFF"
+                               Margin="0,0,0,16"/>
+
+                    <!-- Mensaje -->
+                    <Border Grid.Row="1"
+                            Background="#F44336"
+                            CornerRadius="6"
+                            Padding="12,8"
+                            IsVisible="{Binding MostrarMensaje}"
+                            Margin="0,0,0,12">
+                        <TextBlock Text="{Binding Mensaje}"
+                                   FontSize="12"
+                                   Foreground="#FFFFFF"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Nombre" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.Nombre}"
+                                 PlaceholderText="Nombre"
+                                 Height="36"
+                                 Background="#25253A"
+                                 Foreground="#FFFFFF"
+                                 CaretBrush="#FFFFFF"
+                                 CornerRadius="6"
+                                 Padding="10,0"
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Apellido" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.Apellido}"
+                                 PlaceholderText="Apellido"
+                                 Height="36"
+                                 Background="#25253A"
+                                 Foreground="#FFFFFF"
+                                 CaretBrush="#FFFFFF"
+                                 CornerRadius="6"
+                                 Padding="10,0"
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Matrícula" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.Matricula}"
+                                 PlaceholderText="Número de cuenta"
+                                 Height="36"
+                                 Background="#25253A"
+                                 Foreground="#FFFFFF"
+                                 CaretBrush="#FFFFFF"
+                                 CornerRadius="6"
+                                 Padding="10,0"
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="5" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Tipo de usuario" Foreground="#A6A6B0" FontSize="11"/>
+                        <ComboBox ItemsSource="{Binding TiposUsuario}"
+                                  SelectedItem="{Binding PersonaEnEdicion.TipoPersona}"
+                                  Height="36"
+                                  Background="#25253A"
+                                  Foreground="#FFFFFF"
+                                  CornerRadius="6"
+                                  Padding="10,0"
+                                  VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="6" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Foto" Foreground="#A6A6B0" FontSize="11"/>
+                        <Button Content="Seleccionar foto..."
+                                Command="{Binding SeleccionarFotoCommand}"
+                                Height="36"
+                                Background="#25253A"
+                                Foreground="#FFFFFF"
+                                CornerRadius="6"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Padding="10,0"/>
+                    </StackPanel>
+
+                    <!-- Botones de acción -->
+                    <StackPanel Grid.Row="8" Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
+                        <Button Content="Guardar"
+                                Command="{Binding GuardarCommand}"
+                                Height="40"
+                                Padding="24,0"
+                                Background="#4CAF50"
+                                Foreground="#FFFFFF"
+                                CornerRadius="8"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Stretch" />
+                        <Button Content="Limpiar"
+                                Command="{Binding CancelarCommand}"
+                                Height="40"
+                                Padding="24,0"
+                                Background="#666680"
+                                Foreground="#FFFFFF"
+                                CornerRadius="8"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

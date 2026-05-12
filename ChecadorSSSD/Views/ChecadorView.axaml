@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ChecadorSSSD.Views.ChecadorView"
+             x:DataType="vm:ChecadorViewModel"
+             xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+    <Grid RowDefinitions="Auto,*">
+        <!-- Reloj en la parte superior -->
+        <Border Grid.Row="0" 
+                Background="#1E1E2E" 
+                CornerRadius="16" 
+                Padding="32,16" 
+                Margin="40,40,40,0"
+                HorizontalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="{Binding HoraActual}" 
+                           FontSize="64" 
+                           FontWeight="Bold" 
+                           Foreground="#FFFFFF"
+                           HorizontalAlignment="Center" 
+                           FontFamily="{StaticResource InterFontFamily}"/>
+                <TextBlock Text="{Binding FechaActual}" 
+                           FontSize="20" 
+                           Foreground="#A6A6B0"
+                           HorizontalAlignment="Center" 
+                           Margin="0,8,0,0"
+                           FontFamily="{StaticResource InterFontFamily}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Contenido central para marcar entrada/salida -->
+        <Grid Grid.Row="1" 
+              VerticalAlignment="Center" 
+              HorizontalAlignment="Stretch" 
+              Margin="40,20">
+            <Border Background="#25253A" 
+                    CornerRadius="24" 
+                    Padding="48,32" 
+                    MaxWidth="600" 
+                    HorizontalAlignment="Center">
+                <StackPanel Spacing="24">
+                    <TextBlock Text="Introduce tu matrícula" 
+                               FontSize="28" 
+                               FontWeight="SemiBold" 
+                               Foreground="#FFFFFF"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBox Text="{Binding Matricula}" 
+                             PlaceholderText="Matrícula" 
+                             Height="60" 
+                             FontSize="24" 
+                             CornerRadius="12"
+                             Background="#1E1E2E" 
+                             Foreground="#FFFFFF" 
+                             CaretBrush="#FFFFFF"
+                             Padding="20,0" 
+                             VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Center"
+                             HorizontalAlignment="Stretch"/>
+
+                    <!-- Mensaje de estado -->
+                    <Border Background="{Binding EsError, StringFormat='#F44336' , FallbackValue='#E0E0E0'}" 
+                            CornerRadius="8" 
+                            Padding="16,12" 
+                            IsVisible="{Binding MostrarMensaje}"
+                            HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding Mensaje}" 
+                                   FontSize="16" 
+                                   TextWrapping="Wrap" 
+                                   TextAlignment="Center"
+                                   Foreground="{Binding EsError, StringFormat='#FFFFFF' , FallbackValue='#000000'}"/>
+                    </Border>
+
+                    <Button Content="Marcar Entrada/Salida" 
+                            Command="{Binding RegistrarCommand}" 
+                            Height="60" 
+                            FontSize="20"
+                            FontWeight="Bold" 
+                            CornerRadius="12" 
+                            HorizontalAlignment="Stretch"
+                            Background="#4CAF50" 
+                            Foreground="#FFFFFF" 
+                            Margin="0,16,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Fecha actual pequeña en la parte inferior -->
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding FechaActual}" 
+                   Foreground="#666680" 
+                   FontSize="14"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Bottom" 
+                   Margin="0,0,0,20"/>
+    </Grid>
+</UserControl>

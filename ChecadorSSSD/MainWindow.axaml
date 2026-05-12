@@ -1,0 +1,87 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+        xmlns:views="clr-namespace:ChecadorSSSD.Views"
+        Title="Checador SSSD"
+        Width="1200"
+        Height="800"
+        Background="#12121A"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="250,*">
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#1E1E2E" Padding="0,24">
+            <StackPanel Spacing="8">
+                <!-- Titulo -->
+                <TextBlock Text="CHECADOR"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#FFFFFF"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,32"/>
+
+                <!-- Boton Checador -->
+                <Button Command="{Binding NavigateToChecadorCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="24,16"
+                        Background="Transparent">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Checador" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Boton Personas -->
+                <Button Command="{Binding NavigateToPersonasCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="24,16"
+                        Background="Transparent">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="P" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Personas" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Boton Reportes -->
+                <Button Command="{Binding NavigateToReportesCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Padding="24,16"
+                        Background="Transparent">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="R" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Reportes" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- Contenido Principal -->
+        <Border Grid.Column="1" Background="#12121A">
+            <ContentControl Content="{Binding SelectedViewModel}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Padding="24">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="vm:ChecadorViewModel">
+                        <views:ChecadorView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:PersonasViewModel">
+                        <views:PersonasView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:ReportesViewModel">
+                        <views:ReportesView />
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Border>
+    </Grid>
+</Window>

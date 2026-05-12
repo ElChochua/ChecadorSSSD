@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ChecadorSSSD.Views.ReportesView"
+             x:DataType="vm:ReportesViewModel"
+             xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+             xmlns:models="clr-namespace:ChecadorSSSD.Services"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+    <Grid RowDefinitions="Auto,*" Margin="24">
+        <!-- Encabezado -->
+        <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+            <TextBlock Text="Reportes de Asistencia" FontSize="28" FontWeight="Bold" Foreground="#FFFFFF"/>
+            <TextBlock Text="Genera reportes de asistencia por período y tipo de usuario" FontSize="14" Foreground="#A6A6B0"/>
+        </StackPanel>
+
+        <!-- Contenido principal -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*">
+            <!-- Filtros -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="8">
+                    <!-- Fecha inicio -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Fecha inicio" Foreground="#A6A6B0" FontSize="11"/>
+                        <DatePicker SelectedDate="{Binding FechaInicio}"
+                                    Background="#25253A"
+                                    Foreground="#FFFFFF"
+                                    CornerRadius="6"
+                                    Height="36"/>
+                    </StackPanel>
+
+                    <!-- Fecha fin -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+                        <TextBlock Text="Fecha fin" Foreground="#A6A6B0" FontSize="11"/>
+                        <DatePicker SelectedDate="{Binding FechaFin}"
+                                    Background="#25253A"
+                                    Foreground="#FFFFFF"
+                                    CornerRadius="6"
+                                    Height="36"/>
+                    </StackPanel>
+
+                    <!-- Tipo de usuario -->
+                    <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4">
+                        <TextBlock Text="Tipo de usuario" Foreground="#A6A6B0" FontSize="11"/>
+                        <ComboBox ItemsSource="{Binding TiposUsuario}"
+                                  SelectedItem="{Binding TipoPersonaSeleccionado}"
+                                  PlaceholderText="Todos"
+                                  Height="36"
+                                  Width="150"
+                                  Background="#25253A"
+                                  Foreground="#FFFFFF"
+                                  CornerRadius="6"
+                                  Padding="10,0"
+                                  VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Botón generar -->
+                    <Button Grid.Row="0" Grid.Column="3"
+                            Content="Generar Reporte"
+                            Command="{Binding GenerarCommand}"
+                            Height="36"
+                            Padding="24,0"
+                            Background="#2196F3"
+                            Foreground="#FFFFFF"
+                            CornerRadius="8"
+                            FontWeight="SemiBold"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"/>
+                </Grid>
+            </Border>
+
+            <!-- Mensaje -->
+            <Border Grid.Row="1"
+                    Background="#F44336"
+                    CornerRadius="6"
+                    Padding="12,8"
+                    IsVisible="{Binding MostrarMensaje}"
+                    Margin="0,0,0,16">
+                <TextBlock Text="{Binding Mensaje}"
+                           FontSize="14"
+                           Foreground="#FFFFFF"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            <!-- Resultados -->
+            <Border Grid.Row="2" Background="#1E1E2E" CornerRadius="12" Padding="16" IsVisible="{Binding MostrarResultados}">
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Grid.Row="0"
+                               Text="Resultados"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#FFFFFF"
+                               Margin="0,0,0,12"/>
+
+                    <!-- Tabla de resultados -->
+                    <Grid Grid.Row="1">
+                        <ListBox ItemsSource="{Binding Resultados}"
+                                 Background="Transparent"
+                                 BorderThickness="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:ReporteItem">
+                                    <Border Background="#25253A" CornerRadius="8" Padding="12" Margin="0,4">
+                                        <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                                            <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="#FFFFFF" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Matricula}" Foreground="#A6A6B0" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <Border Grid.Column="2" Background="#4CAF50" CornerRadius="4" Padding="6,2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Rol}" Foreground="#FFFFFF" FontSize="10" FontWeight="SemiBold"/>
+                                            </Border>
+                                            <TextBlock Grid.Column="3" Text="{Binding TotalEntradas}" Foreground="#4CAF50" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding TotalSalidas}" Foreground="#F44336" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="5" Text="{Binding HorasAcumuladas}" Foreground="#2196F3" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="6" Text="hrs" Foreground="#666680" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
