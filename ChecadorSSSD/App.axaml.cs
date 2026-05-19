@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ChecadorSSSD.Data;
 using ChecadorSSSD.Services;
 using ChecadorSSSD.ViewModels;
@@ -38,11 +39,15 @@ public partial class App : Application
     private static void ConfigureServices(IServiceCollection services)
     {
         // DbContext - MySQL
+        var connection = "Server=localhost;Database=checador_sssurn;User=chuas;Password=admin;";
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(
-                "Server=localhost;Database=checador_curn;User=chuas;Password=admin;",
-                new MySqlServerVersion(new Version(8, 0, 2))
-            ));
+                connection,
+                ServerVersion.AutoDetect(connection),
+                mySqlOptions => mySqlOptions.EnableRetryOnFailure()
+            )
+            .EnableSensitiveDataLogging());
 
         // Services
         services.AddSingleton<ChecadorService>();

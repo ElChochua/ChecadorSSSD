@@ -40,12 +40,14 @@ public class PersonasViewModel : ViewModelBase
             {
                 PersonaEnEdicion = new Personas
                 {
-                    Id = value.Id,
+                    IdPersonas = value.IdPersonas,
                     Nombre = value.Nombre,
-                    Apellido = value.Apellido,
+                    ApellidoPaterno = value.ApellidoPaterno,
+                    ApellidoMaterno = value.ApellidoMaterno,
                     Matricula = value.Matricula,
                     TipoPersona = value.TipoPersona,
-                    RutaFoto = value.RutaFoto
+                    Imagen = value.Imagen,
+                    Huella = value.Huella
                 };
                 ModoEdicion = true;
                 TituloFormulario = "Editar Persona";
@@ -122,12 +124,14 @@ public class PersonasViewModel : ViewModelBase
             {
                 PersonaEnEdicion = new Personas
                 {
-                    Id = PersonaSeleccionada.Id,
+                    IdPersonas = PersonaSeleccionada.IdPersonas,
                     Nombre = PersonaSeleccionada.Nombre,
-                    Apellido = PersonaSeleccionada.Apellido,
+                    ApellidoPaterno = PersonaSeleccionada.ApellidoPaterno,
+                    ApellidoMaterno = PersonaSeleccionada.ApellidoMaterno,
                     Matricula = PersonaSeleccionada.Matricula,
                     TipoPersona = PersonaSeleccionada.TipoPersona,
-                    RutaFoto = PersonaSeleccionada.RutaFoto
+                    Imagen = PersonaSeleccionada.Imagen,
+                    Huella = PersonaSeleccionada.Huella
                 };
                 ModoEdicion = true;
                 TituloFormulario = "Editar Persona";
@@ -181,7 +185,8 @@ public class PersonasViewModel : ViewModelBase
         var filtro = Busqueda.ToLower();
         Personas = Personas.Where(p =>
             p.Nombre.ToLower().Contains(filtro) ||
-            p.Apellido.ToLower().Contains(filtro) ||
+            p.ApellidoPaterno.ToLower().Contains(filtro) ||
+            p.ApellidoMaterno.ToLower().Contains(filtro) ||
             p.Matricula.ToLower().Contains(filtro))
             .ToList();
     }
@@ -191,7 +196,8 @@ public class PersonasViewModel : ViewModelBase
         try
         {
             if (string.IsNullOrWhiteSpace(PersonaEnEdicion.Nombre) ||
-                string.IsNullOrWhiteSpace(PersonaEnEdicion.Apellido) ||
+                string.IsNullOrWhiteSpace(PersonaEnEdicion.ApellidoPaterno) ||
+                string.IsNullOrWhiteSpace(PersonaEnEdicion.ApellidoMaterno) ||
                 string.IsNullOrWhiteSpace(PersonaEnEdicion.Matricula))
             {
                 Mensaje = "Por favor, complete todos los campos obligatorios.";
@@ -203,8 +209,8 @@ public class PersonasViewModel : ViewModelBase
             // Guardar foto si se seleccionó una nueva
             if (!string.IsNullOrEmpty(_rutaFotoTemporal))
             {
-                var rutaDestino = GuardarFoto(_rutaFotoTemporal, PersonaEnEdicion.Id);
-                PersonaEnEdicion.RutaFoto = rutaDestino;
+                var rutaDestino = GuardarFoto(_rutaFotoTemporal, PersonaEnEdicion.IdPersonas);
+                PersonaEnEdicion.Imagen = rutaDestino;
                 _rutaFotoTemporal = string.Empty;
             }
 
@@ -238,7 +244,7 @@ public class PersonasViewModel : ViewModelBase
 
         try
         {
-            await _personasService.EliminarAsync(PersonaSeleccionada.Id);
+            await _personasService.EliminarAsync(PersonaSeleccionada.IdPersonas);
             Mensaje = "Persona eliminada correctamente.";
             EsError = false;
             MostrarMensaje = true;

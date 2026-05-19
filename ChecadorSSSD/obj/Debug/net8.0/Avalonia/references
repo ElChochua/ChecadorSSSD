@@ -22,12 +22,13 @@ C:\Users\jossu\.nuget\packages\avalonia.win32\12.0.3\lib\net8.0\Avalonia.Win32.A
 C:\Users\jossu\.nuget\packages\avalonia.win32\12.0.3\lib\net8.0\Avalonia.Win32.dll
 C:\Users\jossu\.nuget\packages\avalonia.x11\12.0.3\lib\net8.0\Avalonia.X11.dll
 C:\Users\jossu\.nuget\packages\avaloniaui.diagnosticssupport\2.2.1\lib\net8.0\AvaloniaUI.DiagnosticsSupport.Avalonia.dll
+C:\Users\jossu\.nuget\packages\dapper\2.1.79\lib\net8.0\Dapper.dll
 C:\Users\jossu\.nuget\packages\harfbuzzsharp\8.3.1.3\lib\net8.0\HarfBuzzSharp.dll
 C:\Users\jossu\.nuget\packages\microcom.runtime\0.11.4\lib\net5.0\MicroCom.Runtime.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.25\ref\net8.0\Microsoft.CSharp.dll
-C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore.abstractions\8.0.26\lib\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore\8.0.26\lib\net8.0\Microsoft.EntityFrameworkCore.dll
-C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.26\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore.abstractions\8.0.27\lib\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore\8.0.27\lib\net8.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\jossu\.nuget\packages\microsoft.entityframeworkcore.relational\8.0.27\lib\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\jossu\.nuget\packages\microsoft.extensions.caching.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Users\jossu\.nuget\packages\microsoft.extensions.caching.memory\8.0.1\lib\net8.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\jossu\.nuget\packages\microsoft.extensions.configuration.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll

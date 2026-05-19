@@ -44,9 +44,14 @@
                                                    Foreground="#FFFFFF"
                                                    FontWeight="SemiBold"
                                                    FontSize="14"/>
-                                        <TextBlock Text="{Binding Apellido}"
-                                                   Foreground="#A6A6B0"
-                                                   FontSize="12"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <TextBlock Text="{Binding ApellidoPaterno}"
+                                                       Foreground="#A6A6B0"
+                                                       FontSize="12"/>
+                                            <TextBlock Text="{Binding ApellidoMaterno}"
+                                                       Foreground="#A6A6B0"
+                                                       FontSize="12"/>
+                                        </StackPanel>
                                         <TextBlock Text="{Binding Matricula}"
                                                    Foreground="#666680"
                                                    FontSize="11"/>
@@ -63,19 +68,19 @@
                                                    FontWeight="SemiBold"/>
                                     </Border>
                                     <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
-                                        <Button Content="✏️"
+                                        <Button Content="Editar"
                                                 Command="{Binding $parent[ListBox].DataContext.EditarCommand}"
                                                 Height="28"
-                                                Width="28"
+                                                Width="60"
                                                 Background="Transparent"
                                                 Foreground="#FFFFFF"
                                                 FontSize="10"
                                                 Padding="0"
                                                 CornerRadius="4"/>
-                                        <Button Content="🗑️"
+                                        <Button Content="Eliminar"
                                                 Command="{Binding $parent[ListBox].DataContext.EliminarCommand}"
                                                 Height="28"
-                                                Width="28"
+                                                Width="60"
                                                 Background="Transparent"
                                                 Foreground="#F44336"
                                                 FontSize="10"
@@ -90,7 +95,7 @@
             </Border>
         </Grid>
 
-        <!-- Formulario de edición SIEMPRE VISIBLE -->
+        <!-- Formulario de edicion SIEMPRE VISIBLE -->
         <Grid Grid.Column="1">
             <Border Background="#1E1E2E"
                     CornerRadius="12"
@@ -130,9 +135,9 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="3" Spacing="4" Margin="0,0,0,12">
-                        <TextBlock Text="Apellido" Foreground="#A6A6B0" FontSize="11"/>
-                        <TextBox Text="{Binding PersonaEnEdicion.Apellido}"
-                                 PlaceholderText="Apellido"
+                        <TextBlock Text="Apellido Paterno" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.ApellidoPaterno}"
+                                 PlaceholderText="Apellido Paterno"
                                  Height="36"
                                  Background="#25253A"
                                  Foreground="#FFFFFF"
@@ -143,9 +148,9 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="4" Spacing="4" Margin="0,0,0,12">
-                        <TextBlock Text="Matrícula" Foreground="#A6A6B0" FontSize="11"/>
-                        <TextBox Text="{Binding PersonaEnEdicion.Matricula}"
-                                 PlaceholderText="Número de cuenta"
+                        <TextBlock Text="Apellido Materno" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.ApellidoMaterno}"
+                                 PlaceholderText="Apellido Materno"
                                  Height="36"
                                  Background="#25253A"
                                  Foreground="#FFFFFF"
@@ -156,6 +161,19 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="5" Spacing="4" Margin="0,0,0,12">
+                        <TextBlock Text="Matricula" Foreground="#A6A6B0" FontSize="11"/>
+                        <TextBox Text="{Binding PersonaEnEdicion.Matricula}"
+                                 PlaceholderText="Numero de cuenta"
+                                 Height="36"
+                                 Background="#25253A"
+                                 Foreground="#FFFFFF"
+                                 CaretBrush="#FFFFFF"
+                                 CornerRadius="6"
+                                 Padding="10,0"
+                                 VerticalContentAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="6" Spacing="4" Margin="0,0,0,12">
                         <TextBlock Text="Tipo de usuario" Foreground="#A6A6B0" FontSize="11"/>
                         <ComboBox ItemsSource="{Binding TiposUsuario}"
                                   SelectedItem="{Binding PersonaEnEdicion.TipoPersona}"
@@ -167,7 +185,7 @@
                                   VerticalContentAlignment="Center"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="6" Spacing="4" Margin="0,0,0,12">
+                    <StackPanel Grid.Row="7" Spacing="4" Margin="0,0,0,12">
                         <TextBlock Text="Foto" Foreground="#A6A6B0" FontSize="11"/>
                         <Button Content="Seleccionar foto..."
                                 Command="{Binding SeleccionarFotoCommand}"
@@ -180,8 +198,8 @@
                                 Padding="10,0"/>
                     </StackPanel>
 
-                    <!-- Botones de acción -->
-                    <StackPanel Grid.Row="8" Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
+                    <!-- Botones de accion -->
+                    <StackPanel Grid.Row="9" Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
                         <Button Content="Guardar"
                                 Command="{Binding GuardarCommand}"
                                 Height="40"

@@ -26,6 +26,13 @@ public class PersonasService
         return await _context.Personas.FindAsync(id);
     }
 
+    public async Task<Personas?> ObtenerPorMatriculaAsync(string matricula)
+    {
+        return await _context.Personas
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Matricula == matricula);
+    }
+
     public async Task<Personas> CrearAsync(Personas persona)
     {
         _context.Personas.Add(persona);

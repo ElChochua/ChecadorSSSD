@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,31 +8,54 @@ public enum TipoPersona
 {
     Brigadista,
     Asesor,
-    PersonalAdministrativo
+    PersonalAdministrativo,
+    Empleado
 }
 
+[Table("personas")]
 public class Personas
 {
     [Key]
-    public int Id { get; set; }
+    [Column("id_personas")]
+    public int IdPersonas { get; set; }
 
     [Required]
+    [Column("Nombre")]
     [MaxLength(100)]
     public string Nombre { get; set; } = string.Empty;
 
     [Required]
+    [Column("Apellido_paterno")]
     [MaxLength(100)]
-    public string Apellido { get; set; } = string.Empty;
+    public string ApellidoPaterno { get; set; } = string.Empty;
 
     [Required]
+    [Column("Apellido_materno")]
+    [MaxLength(100)]
+    public string ApellidoMaterno { get; set; } = string.Empty;
+
+    [Required]
+    [Column("Matricula")]
     [MaxLength(50)]
     public string Matricula { get; set; } = string.Empty;
 
-    [Required]
-    public TipoPersona TipoPersona { get; set; }
+    [Column("Tipo_persona")]
+    [MaxLength(50)]
+    public string? TipoPersona { get; set; }  // "Brigadista", "Asesor", etc.
 
+    [Column("Imagen")]
     [MaxLength(500)]
-    public string? RutaFoto { get; set; }
+    public string? Imagen { get; set; }
 
-    public ICollection<Checadores> Registros { get; set; } = new List<Checadores>();
+    /// <summary>
+    /// Columna de tipo LONGBLOB para almacenar la huella dactilar.
+    /// Se mantiene en standby hasta que se integre un escáner de huellas.
+    /// </summary>
+    [Column("Huella")]
+    [MaxLength(65535)]
+    public byte[]? Huella { get; set; }
+
+    // NOTA: No se define relación de navegación hacia Checadores porque la tabla checador
+    // está denormalizada (no tiene FK a personas). Los datos de nombre, matrícula, etc.
+    // se almacenan directamente en cada registro del checador.
 }
