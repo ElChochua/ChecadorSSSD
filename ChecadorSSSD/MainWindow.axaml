@@ -5,9 +5,8 @@
         xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
         xmlns:views="clr-namespace:ChecadorSSSD.Views"
         Title="Checador SSSD"
-        Width="1200"
-        Height="800"
-        Background="#12121A"
+        WindowState="FullScreen"
+        Background="{StaticResource BrushAzulMarino}"
         WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
@@ -16,56 +15,101 @@
 
     <Grid ColumnDefinitions="250,*">
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="#1E1E2E" Padding="0,24">
-            <StackPanel Spacing="8">
+        <Border Grid.Column="0" Background="{StaticResource BrushAzulMarinoSidebar}" Padding="0,24">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto">
                 <!-- Titulo -->
-                <TextBlock Text="CHECADOR"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           Foreground="#FFFFFF"
+                <TextBlock Grid.Row="0" Text="CHECADOR"
+                           FontSize="24" FontWeight="Bold"
+                           Foreground="{StaticResource BrushDoradoUniversidad}"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,32"/>
+                           Margin="0,0,0,24"/>
 
-                <!-- Boton Checador -->
-                <Button Command="{Binding NavigateToChecadorCommand}"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Padding="24,16"
-                        Background="Transparent">
+                <!-- Botones navegacion -->
+                <Button Grid.Row="1" Command="{Binding NavigateToChecadorCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Padding="24,16" Background="Transparent" Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
-                        <TextBlock Text="Checador" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                        <TextBlock Text="Checador" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="2" Command="{Binding NavigateToPersonasCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Padding="24,16" Background="Transparent" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="P" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                        <TextBlock Text="Personas" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Row="3" Command="{Binding NavigateToReportesCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Padding="24,16" Background="Transparent" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock Text="R" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                        <TextBlock Text="Reportes" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
                     </StackPanel>
                 </Button>
 
-                <!-- Boton Personas -->
-                <Button Command="{Binding NavigateToPersonasCommand}"
+                <!-- Carrusel de imagenes (area restante) -->
+                <Border Grid.Row="4"
+                        Background="{StaticResource BrushAzulMarinoMedio}"
+                        CornerRadius="12"
+                        Padding="8"
+                        Margin="12,16,12,16"
+                        VerticalAlignment="Stretch">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Grid.Row="0"
+                                   Text="{Binding CarruselTituloActual}"
+                                   Foreground="{StaticResource BrushDoradoUniversidad}"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,4"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="NoWrap" />
+                        <Border Grid.Row="1"
+                                Background="{StaticResource BrushAzulMarino}"
+                                CornerRadius="8">
+                            <Image Source="{Binding CarruselImagenActual}"
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Boton Administracion -->
+                <Button Grid.Row="5"
+                        Command="{Binding NavigateToAdministracionCommand}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
                         Padding="24,16"
-                        Background="Transparent">
+                        Background="Transparent"
+                        Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="P" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
-                        <TextBlock Text="Personas" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="A" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                        <TextBlock Text="Administracion" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
                     </StackPanel>
                 </Button>
 
-                <!-- Boton Reportes -->
-                <Button Command="{Binding NavigateToReportesCommand}"
+                <!-- Boton Salir -->
+                <Button Grid.Row="6"
+                        Command="{Binding ExitCommand}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
                         Padding="24,16"
-                        Background="Transparent">
+                        Background="Transparent"
+                        Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="R" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
-                        <TextBlock Text="Reportes" FontSize="16" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="X" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushRojoError}"/>
+                        <TextBlock Text="Salir" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+            </Grid>
         </Border>
 
         <!-- Contenido Principal -->
-        <Border Grid.Column="1" Background="#12121A">
+        <Border Grid.Column="1" Background="{StaticResource BrushAzulMarino}">
             <ContentControl Content="{Binding SelectedViewModel}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
@@ -79,6 +123,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="vm:ReportesViewModel">
                         <views:ReportesView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:AdministracionViewModel">
+                        <views:AdministracionView />
                     </DataTemplate>
                 </ContentControl.DataTemplates>
             </ContentControl>

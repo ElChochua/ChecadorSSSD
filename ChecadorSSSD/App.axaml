@@ -1,10 +1,38 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ChecadorSSSD.App"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             RequestedThemeVariant="Dark">
 
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+    <Application.Resources>
+        <!-- Paleta UAS ajustada (tonos mas apagados y suaves) -->
+        <Color x:Key="AzulMarino">#0D1B2A</Color>
+        <Color x:Key="AzulMarinoMedio">#162D52</Color>
+        <Color x:Key="AzulMarinoClaro">#1F4068</Color>
+        <Color x:Key="AzulMarinoSidebar">#121E33</Color>
+        <Color x:Key="DoradoUniversidad">#8B7A4E</Color>
+        <Color x:Key="DoradoOscuro">#6D5E38</Color>
+        <Color x:Key="DoradoTenue">#EAE0CC</Color>
+        <Color x:Key="GrisTextoClaro">#8A8AA0</Color>
+        <Color x:Key="Blanco">#FFFFFF</Color>
+        <Color x:Key="Negro">#060A11</Color>
+        <Color x:Key="RojoError">#A52C21</Color>
+        <Color x:Key="VerdeExito">#266B29</Color>
+
+        <SolidColorBrush x:Key="BrushAzulMarino" Color="{StaticResource AzulMarino}" />
+        <SolidColorBrush x:Key="BrushAzulMarinoMedio" Color="{StaticResource AzulMarinoMedio}" />
+        <SolidColorBrush x:Key="BrushAzulMarinoClaro" Color="{StaticResource AzulMarinoClaro}" />
+        <SolidColorBrush x:Key="BrushAzulMarinoSidebar" Color="{StaticResource AzulMarinoSidebar}" />
+        <SolidColorBrush x:Key="BrushDoradoUniversidad" Color="{StaticResource DoradoUniversidad}" />
+        <SolidColorBrush x:Key="BrushDoradoOscuro" Color="{StaticResource DoradoOscuro}" />
+        <SolidColorBrush x:Key="BrushDoradoTenue" Color="{StaticResource DoradoTenue}" />
+        <SolidColorBrush x:Key="BrushGrisTextoClaro" Color="{StaticResource GrisTextoClaro}" />
+        <SolidColorBrush x:Key="BrushBlanco" Color="{StaticResource Blanco}" />
+        <SolidColorBrush x:Key="BrushNegro" Color="{StaticResource Negro}" />
+        <SolidColorBrush x:Key="BrushRojoError" Color="{StaticResource RojoError}" />
+        <SolidColorBrush x:Key="BrushVerdeExito" Color="{StaticResource VerdeExito}" />
+    </Application.Resources>
 </Application>

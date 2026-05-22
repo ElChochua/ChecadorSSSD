@@ -130,6 +130,9 @@ public class ReportesViewModel : ViewModelBase
                 OnPropertyChanged(nameof(RangoPaginaText));
                 OnPropertyChanged(nameof(PaginaAnteriorPuedeEjecutarse));
                 OnPropertyChanged(nameof(PaginaSiguientePuedeEjecutarse));
+                OnPropertyChanged(nameof(TotalPaginas));
+                _paginaAnteriorCommand?.RaiseCanExecuteChanged();
+                _paginaSiguienteCommand?.RaiseCanExecuteChanged();
             }
         }
     }
@@ -169,6 +172,10 @@ public class ReportesViewModel : ViewModelBase
     public ICommand PaginaSiguienteCommand { get; }
     public ICommand OrdenarHeaderCommand { get; }
 
+    // Comandos con CanExecute dinamico
+    private RelayCommand _paginaAnteriorCommand = null!;
+    private RelayCommand _paginaSiguienteCommand = null!;
+
     public bool MostrarResultadosHoras => MostrarResultados && EsReporteHoras;
     public bool MostrarResultadosUsuarios => MostrarResultados && !EsReporteHoras;
 
@@ -187,8 +194,10 @@ public class ReportesViewModel : ViewModelBase
             OnPropertyChanged(nameof(ResultadosPaginadosUsuarios));
         });
         ExportarExcelCommand = new RelayCommand(async () => await ExportarExcelAsync());
-        PaginaAnteriorCommand = new RelayCommand(() => PaginaActual--);
-        PaginaSiguienteCommand = new RelayCommand(() => PaginaActual++);
+        _paginaAnteriorCommand = new RelayCommand(() => PaginaActual--, () => PaginaActual > 1);
+        _paginaSiguienteCommand = new RelayCommand(() => PaginaActual++, () => PaginaActual < TotalPaginas);
+        PaginaAnteriorCommand = _paginaAnteriorCommand;
+        PaginaSiguienteCommand = _paginaSiguienteCommand;
         OrdenarHeaderCommand = new RelayCommand<string>((col) => OrdenarHeader(col));
     }
 

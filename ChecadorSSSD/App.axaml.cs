@@ -50,20 +50,27 @@ public partial class App : Application
             .EnableSensitiveDataLogging());
 
         // Services
+        services.AddSingleton<AuthService>();
+        services.AddSingleton<ImageService>();
         services.AddSingleton<ChecadorService>();
         services.AddSingleton<PersonasService>();
         services.AddSingleton<ReportesService>();
+        services.AddSingleton<SettingsService>();
+        services.AddSingleton<ExportService>();
+        services.AddSingleton<AdministradorService>();
 
         // ViewModels
         services.AddSingleton<PersonasViewModel>();
         services.AddSingleton<ReportesViewModel>();
         services.AddSingleton<ChecadorViewModel>();
+        services.AddSingleton<AdministracionViewModel>();
         services.AddSingleton<MainWindowViewModel>();
 
         // Views
         services.AddSingleton<PersonasView>();
         services.AddSingleton<ReportesView>();
         services.AddSingleton<ChecadorView>();
+        services.AddSingleton<AdministracionView>();
         services.AddSingleton<MainWindow>();
     }
 }

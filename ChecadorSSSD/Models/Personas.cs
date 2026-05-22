@@ -55,7 +55,11 @@ public class Personas
     [MaxLength(65535)]
     public byte[]? Huella { get; set; }
 
+    [NotMapped]
+    public string NombreCompleto => $"{Nombre} {ApellidoPaterno} {ApellidoMaterno}".Trim();
+
+    public override string ToString() => NombreCompleto;
+
     // NOTA: No se define relación de navegación hacia Checadores porque la tabla checador
-    // está denormalizada (no tiene FK a personas). Los datos de nombre, matrícula, etc.
     // se almacenan directamente en cada registro del checador.
 }

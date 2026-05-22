@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Personas> Personas { get; set; }
     public DbSet<Checadores> Checadores { get; set; }
+    public DbSet<Administrador> Administradores { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -35,6 +36,18 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Configuracion para Administradores
+        modelBuilder.Entity<Administrador>().ToTable("administradores");
+        modelBuilder.Entity<Administrador>()
+            .Property(a => a.IdAdmin)
+            .HasColumnName("id_admin");
+        modelBuilder.Entity<Administrador>()
+            .Property(a => a.Nombre)
+            .HasColumnName("Nombre");
+        modelBuilder.Entity<Administrador>()
+            .Property(a => a.Contrasenia)
+            .HasColumnName("Contrasenia");
 
         // Configuraci n de tabla y columnas para Personas
         modelBuilder.Entity<Personas>().ToTable("personas");

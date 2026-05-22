@@ -29,6 +29,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [D:/projects/ChecadorSSSD/ChecadorSSSD/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[D:/projects/ChecadorSSSD/ChecadorSSSD/Views/AdministracionView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [D:/projects/ChecadorSSSD/ChecadorSSSD/Views/ChecadorView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -36,4 +39,7 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [D:/projects/ChecadorSSSD/ChecadorSSSD/Views/ReportesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[D:/projects/ChecadorSSSD/ChecadorSSSD/Views/VerPersonaView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

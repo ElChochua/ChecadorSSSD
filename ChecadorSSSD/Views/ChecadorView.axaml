@@ -5,124 +5,146 @@
              xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
-    <Grid RowDefinitions="Auto,*">
-        <!-- Reloj en la parte superior -->
-        <Border Grid.Row="0"
-                Background="#1E1E2E"
-                CornerRadius="16"
-                Padding="32,16"
-                Margin="40,40,40,0"
-                HorizontalAlignment="Center">
-            <StackPanel>
-                <TextBlock Text="{Binding HoraActual}"
-                           FontSize="64"
-                           FontWeight="Bold"
-                           Foreground="#FFFFFF"
-                           HorizontalAlignment="Center"
-                           FontFamily="{StaticResource InterFontFamily}"/>
-                <TextBlock Text="{Binding FechaActual}"
-                           FontSize="20"
-                           Foreground="#A6A6B0"
-                           HorizontalAlignment="Center"
-                           Margin="0,8,0,0"
-                           FontFamily="{StaticResource InterFontFamily}"/>
-            </StackPanel>
-        </Border>
+    <Grid ColumnDefinitions="250,*" Background="{StaticResource BrushAzulMarino}">
+        <!-- Panel izquierdo: Logo Escuela arriba, Unidad Organizativa abajo -->
+        <Grid Grid.Column="0" RowDefinitions="Auto,Auto" Margin="0,24,0,24">
+            <!-- Logo de la Escuela (Universidad) -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource BrushAzulMarinoMedio}"
+                    CornerRadius="16"
+                    Padding="16"
+                    Margin="12,0,12,16">
+                <Image Source="{Binding ImagenUniversidad}"
+                       Stretch="Uniform"
+                       Height="120"
+                       HorizontalAlignment="Stretch" />
+            </Border>
 
-        <!-- Contenido central para marcar entrada/salida -->
-        <Grid Grid.Row="1"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Stretch"
-              Margin="40,20">
-            <Border Background="#25253A"
-                    CornerRadius="24"
-                    Padding="48,32"
-                    MaxWidth="600"
-                    HorizontalAlignment="Center">
-                <StackPanel Spacing="24">
-                    <TextBlock Text="Introduce tu matrícula"
-                               FontSize="28"
-                               FontWeight="SemiBold"
-                               Foreground="#FFFFFF"
-                               HorizontalAlignment="Center"/>
-
-                    <TextBox Text="{Binding Matricula}"
-                             PlaceholderText="Matrícula"
-                             Height="60"
-                             FontSize="24"
-                             CornerRadius="12"
-                             Background="#1E1E2E"
-                             Foreground="#FFFFFF"
-                             CaretBrush="#FFFFFF"
-                             Padding="20,0"
-                             VerticalContentAlignment="Center"
-                             HorizontalContentAlignment="Center"
-                             HorizontalAlignment="Stretch"/>
-
-                    <!-- Mensaje de estado -->
-                    <Border Background="{Binding EsError, StringFormat='#F44336' , FallbackValue='#E0E0E0'}"
-                            CornerRadius="8"
-                            Padding="16,12"
-                            IsVisible="{Binding MostrarMensaje}"
-                            HorizontalAlignment="Stretch">
-                        <TextBlock Text="{Binding Mensaje}"
-                                   FontSize="16"
-                                   TextWrapping="Wrap"
-                                   TextAlignment="Center"
-                                   Foreground="{Binding EsError, StringFormat='#FFFFFF' , FallbackValue='#000000'}"/>
-                    </Border>
-
-                    <Button Content="Marcar Entrada/Salida"
-                            Command="{Binding RegistrarCommand}"
-                            Height="60"
-                            FontSize="20"
-                            FontWeight="Bold"
-                            CornerRadius="12"
-                            HorizontalAlignment="Stretch"
-                            Background="#4CAF50"
-                            Foreground="#FFFFFF"
-                            Margin="0,16,0,0"/>
-
-                    <!-- Sección de huella dactilar en standby -->
-                    <Border Background="#1E1E2E"
-                            CornerRadius="12"
-                            Padding="16"
-                            Margin="0,8,0,0"
-                            IsVisible="true">
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Huella Dactilar"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       Foreground="#666680"
-                                       HorizontalAlignment="Center"/>
-                            <TextBlock Text="Escáner de huella en standby"
-                                       FontSize="12"
-                                       Foreground="#666680"
-                                       HorizontalAlignment="Center"
-                                       FontStyle="Italic"/>
-                            <Border Background="#333344"
-                                    CornerRadius="8"
-                                    Padding="12,6"
-                                    HorizontalAlignment="Center">
-                                <TextBlock Text="STANDBY"
-                                           FontSize="10"
-                                           FontWeight="Bold"
-                                           Foreground="#FF9800"
-                                           HorizontalAlignment="Center"/>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+            <!-- Logo de la Unidad Organizativa (Lugar) -->
+            <Border Grid.Row="1"
+                    Background="{StaticResource BrushAzulMarinoMedio}"
+                    CornerRadius="16"
+                    Padding="16"
+                    Margin="12,0,12,0">
+                <Image Source="{Binding ImagenLugar}"
+                       Stretch="Uniform"
+                       Height="120"
+                       HorizontalAlignment="Stretch" />
             </Border>
         </Grid>
 
-        <!-- Fecha actual pequeña en la parte inferior -->
-        <TextBlock Grid.Row="1"
-                   Text="{Binding FechaActual}"
-                   Foreground="#666680"
-                   FontSize="14"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"
-                   Margin="0,0,0,20"/>
+        <!-- Contenido central del checador -->
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+            <!-- Reloj en la parte superior -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource BrushAzulMarinoMedio}"
+                    CornerRadius="16"
+                    Padding="32,16"
+                    Margin="40,40,40,0"
+                    HorizontalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="{Binding HoraActual}"
+                               FontSize="64"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushDoradoUniversidad}"
+                               HorizontalAlignment="Center"
+                               FontFamily="{StaticResource InterFontFamily}"/>
+                    <TextBlock Text="{Binding FechaActual}"
+                               FontSize="20"
+                               Foreground="{StaticResource BrushGrisTextoClaro}"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0"
+                               FontFamily="{StaticResource InterFontFamily}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Contenido central para marcar entrada/salida -->
+            <Grid Grid.Row="1"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Stretch"
+                  Margin="40,20">
+                <Border Background="{StaticResource BrushAzulMarinoMedio}"
+                        CornerRadius="24"
+                        Padding="48,32"
+                        MaxWidth="600"
+                        HorizontalAlignment="Center">
+                    <StackPanel Spacing="24">
+                        <TextBlock Text="Introduce tu matricula"
+                                   FontSize="28"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushBlanco}"
+                                   HorizontalAlignment="Center"/>
+
+                        <TextBox Text="{Binding Matricula}"
+                                  PlaceholderText="Matricula"
+                                  Height="60"
+                                  FontSize="24"
+                                  CornerRadius="12"
+                                  Background="{StaticResource BrushAzulMarino}"
+                                  Foreground="{StaticResource BrushBlanco}"
+                                  CaretBrush="{StaticResource BrushBlanco}"
+                                  Padding="20,0"
+                                  VerticalContentAlignment="Center"
+                                  HorizontalContentAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  MaxWidth="400" />
+
+                        <!-- Mensaje de estado -->
+                        <Border Background="{Binding EsError, StringFormat='#C0392B' , FallbackValue='#2E7D32'}"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                IsVisible="{Binding MostrarMensaje}"
+                                HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding Mensaje}"
+                                       FontSize="16"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Foreground="{StaticResource BrushBlanco}"/>
+                        </Border>
+
+                        <Button Content="Marcar Entrada/Salida"
+                                Command="{Binding RegistrarCommand}"
+                                Height="60"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                CornerRadius="12"
+                                HorizontalAlignment="Stretch"
+                                Background="{StaticResource BrushDoradoUniversidad}"
+                                Foreground="{StaticResource BrushNegro}"
+                                Margin="0,16,0,0"/>
+
+                        <!-- Seccion de huella dactilar en standby -->
+                        <Border Background="{StaticResource BrushAzulMarino}"
+                                CornerRadius="12"
+                                Padding="16"
+                                Margin="0,8,0,0"
+                                IsVisible="true">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Huella Dactilar"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushGrisTextoClaro}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Escáner de huella en standby"
+                                           FontSize="12"
+                                           Foreground="{StaticResource BrushGrisTextoClaro}"
+                                           HorizontalAlignment="Center"
+                                           FontStyle="Italic"/>
+                                <Border Background="{StaticResource BrushAzulMarinoClaro}"
+                                        CornerRadius="8"
+                                        Padding="12,6"
+                                        HorizontalAlignment="Center">
+                                    <TextBlock Text="STANDBY"
+                                               FontSize="10"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource BrushDoradoUniversidad}"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -1,28 +1,28 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Controls.ApplicationLifetimes;
 using ChecadorSSSD.Models;
 using ChecadorSSSD.Services;
 
 namespace ChecadorSSSD.ViewModels;
 
+/// <summary>
+/// ViewModel de la vista publica de Personas (solo busqueda, ver, copiar).
+/// </summary>
 public class PersonasViewModel : ViewModelBase
 {
     private readonly PersonasService _personasService;
 
     private List<Personas> _personas = new();
+    private List<Personas> _todasLasPersonas = new();
     private Personas? _personaSeleccionada;
-    private Personas _personaEnEdicion = new();
-    private bool _modoEdicion;
     private string _busqueda = string.Empty;
-    private string _rutaFotoTemporal = string.Empty;
     private string _mensaje = string.Empty;
     private bool _esError;
     private bool _mostrarMensaje;
-    private string _tituloFormulario = "Agregar Persona";
 
     public List<Personas> Personas
     {
@@ -35,36 +35,11 @@ public class PersonasViewModel : ViewModelBase
         get => _personaSeleccionada;
         set
         {
-            SetProperty(ref _personaSeleccionada, value);
-            if (value != null)
+            if (SetProperty(ref _personaSeleccionada, value) && value != null)
             {
-                PersonaEnEdicion = new Personas
-                {
-                    IdPersonas = value.IdPersonas,
-                    Nombre = value.Nombre,
-                    ApellidoPaterno = value.ApellidoPaterno,
-                    ApellidoMaterno = value.ApellidoMaterno,
-                    Matricula = value.Matricula,
-                    TipoPersona = value.TipoPersona,
-                    Imagen = value.Imagen,
-                    Huella = value.Huella
-                };
-                ModoEdicion = true;
-                TituloFormulario = "Editar Persona";
+                // Cuando se selecciona, simplemente se muestra en VerPersonaView
             }
         }
-    }
-
-    public Personas PersonaEnEdicion
-    {
-        get => _personaEnEdicion;
-        set => SetProperty(ref _personaEnEdicion, value);
-    }
-
-    public bool ModoEdicion
-    {
-        get => _modoEdicion;
-        set => SetProperty(ref _modoEdicion, value);
     }
 
     public string Busqueda
@@ -72,8 +47,10 @@ public class PersonasViewModel : ViewModelBase
         get => _busqueda;
         set
         {
-            SetProperty(ref _busqueda, value);
-            FiltrarPersonas();
+            if (SetProperty(ref _busqueda, value))
+            {
+                FiltrarPersonas();
+            }
         }
     }
 
@@ -95,76 +72,35 @@ public class PersonasViewModel : ViewModelBase
         set => SetProperty(ref _mostrarMensaje, value);
     }
 
-    public string TituloFormulario
-    {
-        get => _tituloFormulario;
-        set => SetProperty(ref _tituloFormulario, value);
-    }
-
-    public List<string> TiposUsuario => new() { "Brigadista", "Asesor", "Personal Administrativo" };
-
-    public ICommand NuevoCommand { get; }
-    public ICommand GuardarCommand { get; }
-    public ICommand EliminarCommand { get; }
-    public ICommand EditarCommand { get; }
-    public ICommand CancelarCommand { get; }
-    public ICommand SeleccionarFotoCommand { get; }
-    public ICommand CargarDatosCommand { get; }
+    // Comandos
+    public ICommand VerCommand { get; }
+    public ICommand CopiarMatriculaCommand { get; }
 
     public PersonasViewModel(PersonasService personasService)
     {
         _personasService = personasService;
 
-        NuevoCommand = new RelayCommand(() => LimpiarFormulario());
-        GuardarCommand = new RelayCommand(async () => await GuardarAsync());
-        EliminarCommand = new RelayCommand(async () => await EliminarAsync());
-        EditarCommand = new RelayCommand(() =>
+        VerCommand = new RelayCommand<Personas>(async (persona) =>
         {
-            if (PersonaSeleccionada != null)
-            {
-                PersonaEnEdicion = new Personas
-                {
-                    IdPersonas = PersonaSeleccionada.IdPersonas,
-                    Nombre = PersonaSeleccionada.Nombre,
-                    ApellidoPaterno = PersonaSeleccionada.ApellidoPaterno,
-                    ApellidoMaterno = PersonaSeleccionada.ApellidoMaterno,
-                    Matricula = PersonaSeleccionada.Matricula,
-                    TipoPersona = PersonaSeleccionada.TipoPersona,
-                    Imagen = PersonaSeleccionada.Imagen,
-                    Huella = PersonaSeleccionada.Huella
-                };
-                ModoEdicion = true;
-                TituloFormulario = "Editar Persona";
-            }
+            if (persona == null) return;
+            await VerPersonaAsync(persona);
         });
 
-        CancelarCommand = new RelayCommand(() =>
+        CopiarMatriculaCommand = new RelayCommand<Personas>(async (persona) =>
         {
-            LimpiarFormulario();
-            PersonaSeleccionada = null;
+            if (persona == null || string.IsNullOrEmpty(persona.Matricula)) return;
+            await CopiarMatriculaAsync(persona.Matricula);
         });
 
-        SeleccionarFotoCommand = new RelayCommand(SeleccionarFoto);
-        CargarDatosCommand = new RelayCommand(async () => await CargarPersonasAsync());
-
-        // Cargar datos al iniciar
         _ = CargarPersonasAsync();
-    }
-
-    private void LimpiarFormulario()
-    {
-        PersonaEnEdicion = new Personas();
-        ModoEdicion = false;
-        TituloFormulario = "Agregar Persona";
-        PersonaSeleccionada = null;
-        MostrarMensaje = false;
     }
 
     private async Task CargarPersonasAsync()
     {
         try
         {
-            Personas = await _personasService.ObtenerTodasAsync();
+            _todasLasPersonas = await _personasService.ObtenerTodasAsync();
+            Personas = new List<Personas>(_todasLasPersonas);
         }
         catch (Exception ex)
         {
@@ -178,105 +114,56 @@ public class PersonasViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(Busqueda))
         {
-            _ = CargarPersonasAsync();
+            Personas = new List<Personas>(_todasLasPersonas);
             return;
         }
 
         var filtro = Busqueda.ToLower();
-        Personas = Personas.Where(p =>
-            p.Nombre.ToLower().Contains(filtro) ||
-            p.ApellidoPaterno.ToLower().Contains(filtro) ||
-            p.ApellidoMaterno.ToLower().Contains(filtro) ||
-            p.Matricula.ToLower().Contains(filtro))
+        Personas = _todasLasPersonas
+            .Where(p => 
+                p.Nombre.ToLower().Contains(filtro) ||
+                p.ApellidoPaterno.ToLower().Contains(filtro) ||
+                p.ApellidoMaterno.ToLower().Contains(filtro) ||
+                p.Matricula.ToLower().Contains(filtro))
             .ToList();
     }
 
-    private async Task GuardarAsync()
+    private async Task VerPersonaAsync(Personas persona)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(PersonaEnEdicion.Nombre) ||
-                string.IsNullOrWhiteSpace(PersonaEnEdicion.ApellidoPaterno) ||
-                string.IsNullOrWhiteSpace(PersonaEnEdicion.ApellidoMaterno) ||
-                string.IsNullOrWhiteSpace(PersonaEnEdicion.Matricula))
+            var dialog = new Views.VerPersonaView(persona);
+            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
             {
-                Mensaje = "Por favor, complete todos los campos obligatorios.";
-                EsError = true;
-                MostrarMensaje = true;
-                return;
-            }
-
-            // Guardar foto si se seleccionó una nueva
-            if (!string.IsNullOrEmpty(_rutaFotoTemporal))
-            {
-                var rutaDestino = GuardarFoto(_rutaFotoTemporal, PersonaEnEdicion.IdPersonas);
-                PersonaEnEdicion.Imagen = rutaDestino;
-                _rutaFotoTemporal = string.Empty;
-            }
-
-            if (ModoEdicion)
-            {
-                await _personasService.ActualizarAsync(PersonaEnEdicion);
-                Mensaje = "Persona actualizada correctamente.";
+                await dialog.ShowDialog(desktop.MainWindow);
             }
             else
             {
-                await _personasService.CrearAsync(PersonaEnEdicion);
-                Mensaje = "Persona creada correctamente.";
+                dialog.Show();
             }
-
-            EsError = false;
-            MostrarMensaje = true;
-            LimpiarFormulario();
-            await CargarPersonasAsync();
         }
         catch (Exception ex)
         {
-            Mensaje = $"Error: {ex.Message}";
+            Mensaje = $"Error al abrir detalle: {ex.Message}";
             EsError = true;
             MostrarMensaje = true;
         }
     }
 
-    private async Task EliminarAsync()
+    private async Task CopiarMatriculaAsync(string matricula)
     {
-        if (PersonaSeleccionada == null) return;
-
         try
         {
-            await _personasService.EliminarAsync(PersonaSeleccionada.IdPersonas);
-            Mensaje = "Persona eliminada correctamente.";
+            await ClipboardHelper.SetTextAsync(matricula);
+            Mensaje = "Matricula copiada al portapapeles.";
             EsError = false;
             MostrarMensaje = true;
-            LimpiarFormulario();
-            await CargarPersonasAsync();
         }
         catch (Exception ex)
         {
-            Mensaje = $"Error: {ex.Message}";
+            Mensaje = $"Error al copiar: {ex.Message}";
             EsError = true;
             MostrarMensaje = true;
         }
-    }
-
-    private void SeleccionarFoto()
-    {
-        // Placeholder: Implementar diálogo de Avalonia para seleccionar foto
-        Mensaje = "Función de selección de foto pendiente de implementación con diálogo de Avalonia.";
-        EsError = true;
-        MostrarMensaje = true;
-    }
-
-    private string GuardarFoto(string rutaOrigen, int personaId)
-    {
-        var extension = Path.GetExtension(rutaOrigen);
-        var nombreArchivo = $"{personaId}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
-        var rutaDestino = Path.Combine("Assets", "Personas", nombreArchivo);
-        var rutaCompleta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, rutaDestino);
-
-        Directory.CreateDirectory(Path.GetDirectoryName(rutaCompleta)!);
-        File.Copy(rutaOrigen, rutaCompleta, true);
-
-        return rutaDestino;
     }
 }
