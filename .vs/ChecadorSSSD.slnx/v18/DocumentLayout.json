@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "D:\\projects\\ChecadorSSSD\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\mainwindow.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\mainwindow.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\views\\personasview.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\views\\personasview.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
@@ -13,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\models\\personas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\models\\personas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\mainwindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -45,10 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|d:\\projects\\checadorsssd\\checadorsssd\\mainwindow.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{CEB4EDD3-1DB4-47AF-FFDE-CC6F50107EA7}|ChecadorSSSD\\ChecadorSSSD.csproj|solutionrelative:checadorsssd\\mainwindow.axaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -66,45 +66,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "App.axaml.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\App.axaml.cs",
               "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml.cs",
               "RelativeToolTip": "ChecadorSSSD\\App.axaml.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAwwB0AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAwwDYAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-12T09:32:16.193Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "App.axaml",
-              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml",
-              "RelativeDocumentMoniker": "ChecadorSSSD\\App.axaml",
-              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml",
-              "RelativeToolTip": "ChecadorSSSD\\App.axaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-05-12T09:29:57.314Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PersonasView.axaml",
-              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Views\\PersonasView.axaml",
-              "RelativeDocumentMoniker": "ChecadorSSSD\\Views\\PersonasView.axaml",
-              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Views\\PersonasView.axaml",
-              "RelativeToolTip": "ChecadorSSSD\\Views\\PersonasView.axaml",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAjwCwAAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-05-12T09:03:00.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "ChecadorService.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Services\\ChecadorService.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Services\\ChecadorService.cs",
@@ -116,7 +91,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Checadores.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Models\\Checadores.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Models\\Checadores.cs",
@@ -128,7 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Personas.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Models\\Personas.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Models\\Personas.cs",
@@ -136,12 +111,11 @@
               "RelativeToolTip": "ChecadorSSSD\\Models\\Personas.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-12T08:58:38.52Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-12T08:58:38.52Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "PersonasViewModel.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\ViewModels\\PersonasViewModel.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\ViewModels\\PersonasViewModel.cs",
@@ -149,12 +123,11 @@
               "RelativeToolTip": "ChecadorSSSD\\ViewModels\\PersonasViewModel.cs",
               "ViewState": "AgIAAHwAAAAAAAAAAAArwKIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-12T08:58:07.988Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-12T08:58:07.988Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Data\\AppDbContext.cs",
@@ -166,7 +139,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Program.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Program.cs",
@@ -178,7 +151,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "MainWindow.axaml.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\MainWindow.axaml.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\MainWindow.axaml.cs",
@@ -190,7 +163,44 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
+              "Title": "MainWindow.axaml",
+              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\MainWindow.axaml",
+              "RelativeDocumentMoniker": "ChecadorSSSD\\MainWindow.axaml",
+              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\MainWindow.axaml",
+              "RelativeToolTip": "ChecadorSSSD\\MainWindow.axaml",
+              "ViewState": "AgIAABsAAAAAAAAAAADwvygAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-12T02:13:11.764Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PersonasView.axaml",
+              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Views\\PersonasView.axaml",
+              "RelativeDocumentMoniker": "ChecadorSSSD\\Views\\PersonasView.axaml",
+              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Views\\PersonasView.axaml",
+              "RelativeToolTip": "ChecadorSSSD\\Views\\PersonasView.axaml",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAjwCwAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-12T09:03:00.875Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "App.axaml",
+              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml",
+              "RelativeDocumentMoniker": "ChecadorSSSD\\App.axaml",
+              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\App.axaml",
+              "RelativeToolTip": "ChecadorSSSD\\App.axaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-12T09:29:57.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "ReportesService.cs",
               "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\Services\\ReportesService.cs",
               "RelativeDocumentMoniker": "ChecadorSSSD\\Services\\ReportesService.cs",
@@ -199,18 +209,6 @@
               "ViewState": "AgIAABgAAAAAAAAAAAAswCcAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-12T09:03:03.666Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "MainWindow.axaml",
-              "DocumentMoniker": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\MainWindow.axaml",
-              "RelativeDocumentMoniker": "ChecadorSSSD\\MainWindow.axaml",
-              "ToolTip": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\MainWindow.axaml",
-              "RelativeToolTip": "ChecadorSSSD\\MainWindow.axaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-05-12T02:13:11.764Z"
             }
           ]
         }

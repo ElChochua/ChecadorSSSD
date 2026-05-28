@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Personas> Personas { get; set; }
-    public DbSet<Checadores> Checadores { get; set; }
+    public DbSet<AsistenciaChecador> AsistenciasChecador { get; set; }
     public DbSet<Administrador> Administradores { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -43,77 +43,63 @@ public class AppDbContext : DbContext
             .Property(a => a.IdAdmin)
             .HasColumnName("id_admin");
         modelBuilder.Entity<Administrador>()
-            .Property(a => a.Nombre)
-            .HasColumnName("Nombre");
+            .Property(a => a.IdPersona)
+            .HasColumnName("id_persona");
+        modelBuilder.Entity<Administrador>()
+            .Property(a => a.Usuario)
+            .HasColumnName("usuario");
         modelBuilder.Entity<Administrador>()
             .Property(a => a.Contrasenia)
-            .HasColumnName("Contrasenia");
+            .HasColumnName("contrasenia");
 
-        // Configuraci n de tabla y columnas para Personas
+        // Configuracion de tabla y columnas para Personas
         modelBuilder.Entity<Personas>().ToTable("personas");
         modelBuilder.Entity<Personas>()
-            .Property(p => p.IdPersonas)
-            .HasColumnName("id_personas");
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.ApellidoPaterno)
-            .HasColumnName("Apellido_paterno");
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.ApellidoMaterno)
-            .HasColumnName("Apellido_materno");
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.TipoPersona)
-            .HasColumnName("Tipo_persona")
-            .IsRequired(false);
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.Huella)
-            .HasColumnName("Huella")
-            .HasColumnType("LONGBLOB");
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.Imagen)
-            .HasColumnName("Imagen");
-        modelBuilder.Entity<Personas>()
-            .Property(p => p.Matricula)
-            .HasColumnName("Matricula");
+            .Property(p => p.IdPersona)
+            .HasColumnName("id_persona");
         modelBuilder.Entity<Personas>()
             .Property(p => p.Nombre)
-            .HasColumnName("Nombre");
+            .HasColumnName("nombre");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.ApellidoPaterno)
+            .HasColumnName("apellido_paterno");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.ApellidoMaterno)
+            .HasColumnName("apellido_materno");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.TipoPersona)
+            .HasColumnName("tipo_persona");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.Matricula)
+            .HasColumnName("matricula");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.Huella)
+            .HasColumnName("huella");
+        modelBuilder.Entity<Personas>()
+            .Property(p => p.Imagen)
+            .HasColumnName("imagen");
 
-        //  ndice  nico para Matricula
+        // Indice unico para Matricula
         modelBuilder.Entity<Personas>()
             .HasIndex(p => p.Matricula)
             .IsUnique();
 
-        // Configuraci n para Checadores (sin ValueConverters - mapeo directo)
-        modelBuilder.Entity<Checadores>().ToTable("checador");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.IdChecador)
-            .HasColumnName("id_checador");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.TipoAccion)
-            .HasColumnName("Tipo_accion")
-            .IsRequired(false);
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.Fecha)
-            .HasColumnName("Fecha");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.HoraRaw)
-            .HasColumnName("Hora")
-            .IsRequired(false);
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.Matricula)
-            .HasColumnName("Matricula");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.Nombre)
-            .HasColumnName("Nombre");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.ApellidoPaterno)
-            .HasColumnName("Apellido_paterno");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.ApellidoMaterno)
-            .HasColumnName("Apellido_materno");
-        modelBuilder.Entity<Checadores>()
-            .Property(c => c.TipoPersona)
-            .HasColumnName("Tipo_persona")
-            .IsRequired(false);
+        // Configuracion para AsistenciasChecador
+        modelBuilder.Entity<AsistenciaChecador>().ToTable("asistencias_checador");
+        modelBuilder.Entity<AsistenciaChecador>()
+            .Property(a => a.IdAsistencia)
+            .HasColumnName("id_asistencia");
+        modelBuilder.Entity<AsistenciaChecador>()
+            .Property(a => a.IdPersona)
+            .HasColumnName("id_persona");
+        modelBuilder.Entity<AsistenciaChecador>()
+            .Property(a => a.HoraEntrada)
+            .HasColumnName("hora_entrada");
+        modelBuilder.Entity<AsistenciaChecador>()
+            .Property(a => a.HoraSalida)
+            .HasColumnName("hora_salida");
+        modelBuilder.Entity<AsistenciaChecador>()
+            .Property(a => a.Estatus)
+            .HasColumnName("estatus");
     }
 }

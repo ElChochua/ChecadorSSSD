@@ -13,18 +13,21 @@
                     <TextBlock Text="Personas" FontSize="24" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
                     <TextBlock Text="Busqueda de usuarios registrados en el sistema" FontSize="12" Foreground="{StaticResource BrushGrisTextoClaro}"/>
                 </StackPanel>
-                <TextBox Grid.Column="1"
-                         Text="{Binding Busqueda}"
-                         PlaceholderText="Buscar..."
-                         Width="300"
-                         Height="36"
-                         VerticalContentAlignment="Center"
-                         Background="{StaticResource BrushAzulMarinoClaro}"
-                         Foreground="{StaticResource BrushBlanco}"
-                         CaretBrush="{StaticResource BrushBlanco}"
-                         CornerRadius="6"
-                         Padding="10,0"
-                         FontSize="13"/>
+                <Grid Grid.Column="1" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                    <Image Grid.Column="0" Source="avares://ChecadorSSSD/Assets/icons/search.png" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Busqueda}"
+                             PlaceholderText="Buscar..."
+                             Width="300"
+                             Height="36"
+                             VerticalContentAlignment="Center"
+                             Background="{StaticResource BrushAzulMarinoClaro}"
+                             Foreground="{StaticResource BrushBlanco}"
+                             CaretBrush="{StaticResource BrushBlanco}"
+                             CornerRadius="6"
+                             Padding="10,0"
+                             FontSize="13"/>
+                </Grid>
             </Grid>
 
             <!-- Tabla de personas -->
@@ -62,16 +65,14 @@
                                                         FontWeight="SemiBold"
                                                         CornerRadius="4"
                                                         ToolTip.Tip="Ver detalle"/>
-                                                <Button Content="Copiar"
-                                                        Command="{Binding $parent[ItemsControl].DataContext.CopiarMatriculaCommand}"
-                                                        CommandParameter="{Binding}"
-                                                        Background="{StaticResource BrushDoradoUniversidad}"
-                                                        Foreground="{StaticResource BrushNegro}"
-                                                        Height="28" FontSize="10"
+                                                 <Button Height="28" FontSize="10"
                                                         Padding="8,0"
                                                         FontWeight="SemiBold"
                                                         CornerRadius="4"
-                                                        ToolTip.Tip="Copiar matricula"/>
+                                                        ToolTip.Tip="Copiar matricula"
+                                                        Background="Transparent">
+                                                        <Image Source="avares://ChecadorSSSD/Assets/icons/copy.png" Width="14" Height="14" />
+                                                </Button>
                                             </StackPanel>
                                         </Grid>
                                     </Border>

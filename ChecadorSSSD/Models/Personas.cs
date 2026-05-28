@@ -16,50 +16,42 @@ public enum TipoPersona
 public class Personas
 {
     [Key]
-    [Column("id_personas")]
-    public int IdPersonas { get; set; }
+    [Column("id_persona")]
+    public int IdPersona { get; set; }
 
     [Required]
-    [Column("Nombre")]
-    [MaxLength(100)]
+    [Column("nombre")]
+    [MaxLength(200)]
     public string Nombre { get; set; } = string.Empty;
 
-    [Required]
-    [Column("Apellido_paterno")]
-    [MaxLength(100)]
-    public string ApellidoPaterno { get; set; } = string.Empty;
+    [Column("apellido_paterno")]
+    [MaxLength(200)]
+    public string? ApellidoPaterno { get; set; }
+
+    [Column("apellido_materno")]
+    [MaxLength(200)]
+    public string? ApellidoMaterno { get; set; }
 
     [Required]
-    [Column("Apellido_materno")]
-    [MaxLength(100)]
-    public string ApellidoMaterno { get; set; } = string.Empty;
+    [Column("tipo_persona")]
+    [MaxLength(50)]
+    public string TipoPersona { get; set; } = "Brigadista";
 
     [Required]
-    [Column("Matricula")]
+    [Column("matricula")]
     [MaxLength(50)]
     public string Matricula { get; set; } = string.Empty;
 
-    [Column("Tipo_persona")]
-    [MaxLength(50)]
-    public string? TipoPersona { get; set; }  // "Brigadista", "Asesor", etc.
-
-    [Column("Imagen")]
-    [MaxLength(500)]
-    public string? Imagen { get; set; }
-
-    /// <summary>
-    /// Columna de tipo LONGBLOB para almacenar la huella dactilar.
-    /// Se mantiene en standby hasta que se integre un escáner de huellas.
-    /// </summary>
-    [Column("Huella")]
-    [MaxLength(65535)]
+    [Column("huella")]
     public byte[]? Huella { get; set; }
 
+    [Column("imagen")]
+    [MaxLength(200)]
+    public string? Imagen { get; set; }
+
     [NotMapped]
-    public string NombreCompleto => $"{Nombre} {ApellidoPaterno} {ApellidoMaterno}".Trim();
+    public string NombreCompleto => 
+        $"{Nombre} {ApellidoPaterno ?? ""} {ApellidoMaterno ?? ""}".Trim();
 
     public override string ToString() => NombreCompleto;
-
-    // NOTA: No se define relación de navegación hacia Checadores porque la tabla checador
-    // se almacenan directamente en cada registro del checador.
 }

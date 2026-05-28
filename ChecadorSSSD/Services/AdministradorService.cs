@@ -39,16 +39,16 @@ public class AdministradorService
         return await _context.Administradores.FindAsync(id);
     }
 
-    public async Task<Administrador?> ObtenerPorNombreAsync(string nombre)
+    public async Task<Administrador?> ObtenerPorUsuarioAsync(string usuario)
     {
         return await _context.Administradores
-            .FirstOrDefaultAsync(a => a.Nombre.ToLower() == nombre.ToLower());
+            .FirstOrDefaultAsync(a => a.Usuario.ToLower() == usuario.ToLower());
     }
 
-    public async Task<Administrador?> ValidarCredencialesAsync(string nombre, string contrasenia)
+    public async Task<Administrador?> ValidarCredencialesAsync(string usuario, string contrasenia)
     {
         var admin = await _context.Administradores
-            .FirstOrDefaultAsync(a => a.Nombre.ToLower() == nombre.ToLower());
+            .FirstOrDefaultAsync(a => a.Usuario.ToLower() == usuario.ToLower());
 
         if (admin == null) return null;
 
@@ -60,8 +60,8 @@ public class AdministradorService
             return admin;
         }
 
-        // Si no coincide, y la contraseña almacenada está en texto plano (migración legada):
-        // Intentamos comparar en texto plano y si coincide, actualizamos a hash automáticamente
+        // Si no coincide, y la contraseña almacenada est� en texto plano (migraci�n legada):
+        // Intentamos comparar en texto plano y si coincide, actualizamos a hash autom�ticamente
         if (admin.Contrasenia == contrasenia)
         {
             admin.Contrasenia = hashIngresado;
@@ -85,8 +85,8 @@ public class AdministradorService
         var existing = await _context.Administradores.FindAsync(admin.IdAdmin);
         if (existing == null) throw new Exception("Administrador no encontrado.");
 
-        existing.Nombre = admin.Nombre;
-        // Solo actualizar la contraseña si se proporcionó una nueva
+        existing.Usuario = admin.Usuario;
+        // Solo actualizar la contraseña si se proporci� una nueva
         if (!string.IsNullOrEmpty(admin.Contrasenia))
         {
             existing.Contrasenia = HashPassword(admin.Contrasenia);

@@ -93,16 +93,51 @@
                 </TabItem>
                 <TabItem Header="Reportes" Foreground="{StaticResource BrushBlanco}">
                     <Grid RowDefinitions="Auto,Auto,Auto,*">
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
-                            <ComboBox ItemsSource="{Binding Personas}" SelectedItem="{Binding PersonaReporteSeleccionada}" DisplayMemberBinding="{Binding NombreCompleto}" PlaceholderText="Seleccionar persona..." Width="250" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
-                            <TextBox Text="{Binding MatriculaReporte}" PlaceholderText="Matricula" Width="180" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
+                        <Grid Grid.Row="0" ColumnDefinitions="*,300" Margin="0,0,0,12">
+                            <StackPanel Grid.Column="0" Spacing="8">
+                                <TextBlock Text="Seleccionar Personas para el Reporte" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                                <TextBox Text="{Binding BusquedaPersonasReporte, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Buscar personas..." Width="300" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
+                                <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="8" Padding="8" MaxHeight="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl ItemsSource="{Binding PersonasFiltradasReporte}" Background="Transparent">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="models:Personas">
+                                                    <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                                                        <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center"/>
+                                                        <Button Grid.Column="1" Content="+" Command="{Binding $parent[ItemsControl].DataContext.AgregarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="4" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="8" Margin="8,0,0,0">
+                                <TextBlock Text="Personas Seleccionadas" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                                <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="8" Padding="8" MaxHeight="200">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl ItemsSource="{Binding PersonasSeleccionadasReporte}" Background="Transparent">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="models:Personas">
+                                                    <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                                                        <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center"/>
+                                                        <Button Grid.Column="1" Content="-" Command="{Binding $parent[ItemsControl].DataContext.QuitarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="4" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
                             <ComboBox ItemsSource="{Binding TiposReporte}" SelectedItem="{Binding TipoReporteSeleccionado}" PlaceholderText="Tipo de reporte..." Width="200" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
                             <DatePicker SelectedDate="{Binding FechaInicioReporte}" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6"/>
                             <DatePicker SelectedDate="{Binding FechaFinReporte}" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6"/>
                             <Button Command="{Binding GenerarReporteIndividuaCommand}" Content="Generar Reporte" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold"/>
                         </StackPanel>
-                        <!-- Búsqueda + Paginador -->
-                        <Border Grid.Row="1" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8" Padding="8,4" Margin="0,0,0,12">
+                        <!-- Busqueda + Paginador -->
+                        <Border Grid.Row="2" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8" Padding="8,4" Margin="0,0,0,12">
                             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                 <TextBox Text="{Binding BusquedaReporte}" PlaceholderText="Buscar..." Width="200" Height="32" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="4" Padding="8,0" VerticalContentAlignment="Center" FontSize="12"/>
                                 <Button Content="Anterior" Command="{Binding PaginaAnteriorCommand}" Padding="8,2" Background="Transparent" Foreground="{StaticResource BrushGrisTextoClaro}" BorderBrush="{StaticResource BrushAzulMarinoClaro}" BorderThickness="0" FontSize="12"/>
@@ -111,7 +146,7 @@
                             </StackPanel>
                         </Border>
                         <!-- Resultados HORAS -->
-                        <Grid Grid.Row="2" IsVisible="{Binding MostrarResultadosHoras}">
+                        <Grid Grid.Row="3" IsVisible="{Binding MostrarResultadosHoras}">
                             <Grid RowDefinitions="Auto,*">
                                 <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8,8,0,0" Padding="12,8">
                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*">
@@ -151,7 +186,7 @@
                             </Grid>
                         </Grid>
                         <!-- Resultados USUARIOS -->
-                        <Grid Grid.Row="2" IsVisible="{Binding MostrarResultadosUsuarios}">
+                        <Grid Grid.Row="3" IsVisible="{Binding MostrarResultadosUsuarios}">
                             <Grid RowDefinitions="Auto,*">
                                 <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8,8,0,0" Padding="12,8">
                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*,*,*,*">
@@ -246,11 +281,11 @@
                             <Border Grid.Row="1" Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="12">
                                 <ListBox ItemsSource="{Binding Administradores}" Background="Transparent" BorderThickness="0">
                                     <ListBox.ItemTemplate>
-                                        <DataTemplate DataType="models:Administrador">
-                                            <Border Background="{StaticResource BrushAzulMarinoClaro}" CornerRadius="8" Padding="12,8" Margin="0,4">
-                                                <Grid ColumnDefinitions="*,Auto">
-                                                    <StackPanel Grid.Column="0" Spacing="2">
-                                                        <TextBlock Text="{Binding Nombre}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
+                                         <DataTemplate DataType="models:Administrador">
+                                             <Border Background="{StaticResource BrushAzulMarinoClaro}" CornerRadius="8" Padding="12,8" Margin="0,4">
+                                                 <Grid ColumnDefinitions="*,Auto">
+                                                     <StackPanel Grid.Column="0" Spacing="2">
+                                                         <TextBlock Text="{Binding Usuario}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
                                                         <TextBlock Text="{Binding IdAdmin, StringFormat='ID: {0}'}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/>
                                                     </StackPanel>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
@@ -268,7 +303,7 @@
                             <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="20">
                                 <StackPanel Spacing="12">
                                     <TextBlock Text="{Binding TituloFormularioAdmin}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushBlanco}" Margin="0,0,0,8"/>
-                                    <StackPanel Spacing="4"><TextBlock Text="Nombre" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding AdminEnEdicion.Nombre}" PlaceholderText="Nombre" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Usuario" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding AdminEnEdicion.Usuario}" PlaceholderText="Usuario" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
                                     <StackPanel Spacing="4"><TextBlock Text="Contrasenia" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding AdminEnEdicion.Contrasenia}" PasswordChar="*" PlaceholderText="Contrasenia" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
                                     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
                                         <Button Command="{Binding GuardarAdminCommand}" Content="Guardar" Height="40" Padding="24,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="8" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>

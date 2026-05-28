@@ -45,6 +45,11 @@ public class AdministracionViewModel : ViewModelBase
     private int _paginaActual = 1;
     private readonly int _registrosPorPagina = 50;
 
+    // Seleccion multiple para reportes
+    private string _busquedaPersonasReporte = string.Empty;
+    private List<Personas> _personasFiltradasReporte = new();
+    private List<Personas> _personasSeleccionadasReporte = new();
+
     private List<ReporteAdminItem> _resultadoReporte = new();
 
     // Imagenes
@@ -109,7 +114,7 @@ public class AdministracionViewModel : ViewModelBase
             {
                 PersonaEnEdicion = new Personas
                 {
-                    IdPersonas = value.IdPersonas,
+                    IdPersona = value.IdPersona,
                     Nombre = value.Nombre,
                     ApellidoPaterno = value.ApellidoPaterno,
                     ApellidoMaterno = value.ApellidoMaterno,
@@ -162,6 +167,31 @@ public class AdministracionViewModel : ViewModelBase
                 MatriculaReporte = value?.Matricula ?? string.Empty;
             }
         }
+    }
+
+    // Propiedades para seleccion multiple de personas en reportes
+    public string BusquedaPersonasReporte
+    {
+        get => _busquedaPersonasReporte;
+        set
+        {
+            if (SetProperty(ref _busquedaPersonasReporte, value))
+            {
+                FiltrarPersonasReporte();
+            }
+        }
+    }
+
+    public List<Personas> PersonasFiltradasReporte
+    {
+        get => _personasFiltradasReporte;
+        set => SetProperty(ref _personasFiltradasReporte, value);
+    }
+
+    public List<Personas> PersonasSeleccionadasReporte
+    {
+        get => _personasSeleccionadasReporte;
+        set => SetProperty(ref _personasSeleccionadasReporte, value);
     }
 
     public DateTimeOffset? FechaInicioReporte
@@ -336,7 +366,7 @@ public class AdministracionViewModel : ViewModelBase
                 AdminEnEdicion = new Administrador
                 {
                     IdAdmin = value.IdAdmin,
-                    Nombre = value.Nombre,
+                    Usuario = value.Usuario,
                     Contrasenia = string.Empty
                 };
                 ModoEdicionAdminCrud = true;
@@ -389,6 +419,8 @@ public class AdministracionViewModel : ViewModelBase
     public ICommand EliminarPersonaCommand { get; }
     public ICommand BuscarPersonaCommand { get; }
     public ICommand GenerarReporteIndividuaCommand { get; }
+    public ICommand AgregarPersonaReporteCommand { get; }
+    public ICommand QuitarPersonaReporteCommand { get; }
     public ICommand GuardarImagenLogoCommand { get; }
     public ICommand GuardarImagenLugarCommand { get; }
     public ICommand GuardarImagenUniversidadCommand { get; }
@@ -419,6 +451,9 @@ public class AdministracionViewModel : ViewModelBase
         _authService = authService;
         _imageService = new ImageService();
 
+        PersonasFiltradasReporte = new List<Personas>();
+        PersonasSeleccionadasReporte = new List<Personas>();
+
         LoginCommand = new RelayCommand(async () => await LoginAsync());
         LogoutCommand = new RelayCommand(() => { Autenticado = false; MensajeLogin = string.Empty; });
         
@@ -440,6 +475,8 @@ public class AdministracionViewModel : ViewModelBase
         EliminarPersonaCommand = new RelayCommand(async () => await EliminarPersonaAdminAsync());
         BuscarPersonaCommand = new RelayCommand(async () => await BuscarPersonaAdminAsync());
         GenerarReporteIndividuaCommand = new RelayCommand(async () => await GenerarReporteIndividualAsync());
+        AgregarPersonaReporteCommand = new RelayCommand<Personas>(p => { if (p != null) AgregarPersonaReporte(p); });
+        QuitarPersonaReporteCommand = new RelayCommand<Personas>(p => { if (p != null) QuitarPersonaReporte(p); });
         GuardarImagenLogoCommand = new RelayCommand(() => GuardarImagenConfig(nameof(RutaLogo), RutaLogo));
         GuardarImagenLugarCommand = new RelayCommand(() => GuardarImagenConfig(nameof(RutaLugar), RutaLugar));
         GuardarImagenUniversidadCommand = new RelayCommand(() => GuardarImagenConfig(nameof(RutaUniversidad), RutaUniversidad));
@@ -549,7 +586,7 @@ public class AdministracionViewModel : ViewModelBase
         if (PersonaSeleccionada == null) return;
         try
         {
-            await _personasService.EliminarAsync(PersonaSeleccionada.IdPersonas);
+            await _personasService.EliminarAsync(PersonaSeleccionada.IdPersona);
             MostrarExito("Persona eliminada.");
             await CargarPersonasAdminAsync();
         }
@@ -565,11 +602,40 @@ public class AdministracionViewModel : ViewModelBase
         FiltrarPersonasAdmin();
     }
 
+    private void FiltrarPersonasReporte()
+    {
+        if (string.IsNullOrWhiteSpace(BusquedaPersonasReporte))
+        {
+            PersonasFiltradasReporte = new List<Personas>(_todasLasPersonas);
+            return;
+        }
+        var f = BusquedaPersonasReporte.ToLower();
+        PersonasFiltradasReporte = _todasLasPersonas.Where(p =>
+            p.Nombre.ToLower().Contains(f) ||
+            p.Matricula.ToLower().Contains(f))
+            .ToList();
+    }
+
+    public void AgregarPersonaReporte(Personas persona)
+    {
+        if (!PersonasSeleccionadasReporte.Any(p => p.IdPersona == persona.IdPersona))
+        {
+            PersonasSeleccionadasReporte = new List<Personas>(PersonasSeleccionadasReporte) { persona };
+            OnPropertyChanged(nameof(PersonasSeleccionadasReporte));
+        }
+    }
+
+    public void QuitarPersonaReporte(Personas persona)
+    {
+        PersonasSeleccionadasReporte = PersonasSeleccionadasReporte.Where(p => p.IdPersona != persona.IdPersona).ToList();
+        OnPropertyChanged(nameof(PersonasSeleccionadasReporte));
+    }
+
     private async Task GenerarReporteIndividualAsync()
     {
-        if (PersonaReporteSeleccionada == null)
+        if (PersonasSeleccionadasReporte.Count == 0)
         {
-            MostrarError("Seleccione una persona.");
+            MostrarError("Seleccione al menos una persona para el reporte.");
             return;
         }
 
@@ -581,11 +647,12 @@ public class AdministracionViewModel : ViewModelBase
 
         var fechaInicio = FechaInicioReporte.Value.DateTime;
         var fechaFin = FechaFinReporte.Value.DateTime;
+        var idsPersonas = PersonasSeleccionadasReporte.Select(p => p.IdPersona).ToList();
 
         if (EsReporteHoras)
         {
-            var (reporte, ok) = await _reportesService.GenerarReporteAsync(fechaInicio, fechaFin, null);
-            _reporteHoras = reporte.Where(r => r.Matricula == MatriculaReporte).ToList();
+            var (reporte, ok) = await _reportesService.GenerarReporteAsync(fechaInicio, fechaFin, null, idsPersonas);
+            _reporteHoras = reporte;
             _reporteUsuarios = new List<ReporteDetalleItem>();
 
             if (!ok || _reporteHoras.Count == 0)
@@ -596,8 +663,8 @@ public class AdministracionViewModel : ViewModelBase
         }
         else
         {
-            var (reporte, ok) = await _reportesService.GenerarReporteUsuariosAsync(fechaInicio, fechaFin, null);
-            _reporteUsuarios = reporte.Where(r => r.Matricula == MatriculaReporte).ToList();
+            var (reporte, ok) = await _reportesService.GenerarReporteUsuariosAsync(fechaInicio, fechaFin, null, idsPersonas);
+            _reporteUsuarios = reporte;
             _reporteHoras = new List<ReporteItem>();
 
             if (!ok || _reporteUsuarios.Count == 0)
@@ -714,9 +781,9 @@ public class AdministracionViewModel : ViewModelBase
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(AdminEnEdicion.Nombre))
+            if (string.IsNullOrWhiteSpace(AdminEnEdicion.Usuario))
             {
-                MostrarError("El nombre es obligatorio.");
+                MostrarError("El usuario es obligatorio.");
                 return;
             }
             if (ModoEdicionAdminCrud)

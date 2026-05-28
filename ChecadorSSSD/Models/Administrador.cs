@@ -11,12 +11,20 @@ public class Administrador
     public int IdAdmin { get; set; }
 
     [Required]
-    [Column("Nombre")]
-    [MaxLength(100)]
-    public string Nombre { get; set; } = string.Empty;
+    [Column("id_persona")]
+    public int IdPersona { get; set; }
 
     [Required]
-    [Column("Contrasenia")]
+    [Column("usuario")]
     [MaxLength(200)]
+    public string Usuario { get; set; } = string.Empty;
+
+    [Required]
+    [Column("contrasenia")]
+    [MaxLength(500)]
     public string Contrasenia { get; set; } = string.Empty;
+
+    // Navegacion
+    [ForeignKey("IdPersona")]
+    public Personas? Persona { get; set; }
 }

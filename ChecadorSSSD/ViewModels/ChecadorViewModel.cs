@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -123,7 +124,7 @@ public class ChecadorViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(Matricula))
         {
-            Mensaje = "Por favor, introduce una matrícula.";
+            Mensaje = "Por favor, introduce una matr�cula.";
             EsError = true;
             MostrarMensaje = true;
             return;
@@ -131,9 +132,10 @@ public class ChecadorViewModel : ViewModelBase
 
         try
         {
-            var (accion, mensaje) = await _checadorService.MarcarEntradaSalidaAsync(Matricula.Trim());
+            var (tipo, mensaje) = await _checadorService.MarcarAsistenciaAsync(Matricula.Trim());
             Mensaje = mensaje;
-            EsError = accion == TipoAccion.Salida;
+            // entrada, salida y nueva son exitosos; info no es error pero es informativo; error s� lo es
+            EsError = tipo == "error";
             MostrarMensaje = true;
             Matricula = string.Empty;
         }

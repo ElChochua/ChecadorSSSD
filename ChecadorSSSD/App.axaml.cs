@@ -38,26 +38,29 @@ public partial class App : Application
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        // DbContext - MySQL
-        var connection = "Server=localhost;Database=checador_sssurn;User=chuas;Password=admin;";
+        // Connection string MySQL
+        var connection = "Server=localhost;Database=subdireccion_ss_urn;User=root;Password=admin;";
 
+        // DbContext - MySQL (Scoped)
         services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(
                 connection,
                 ServerVersion.AutoDetect(connection),
                 mySqlOptions => mySqlOptions.EnableRetryOnFailure()
             )
-            .EnableSensitiveDataLogging());
+            .EnableSensitiveDataLogging(), ServiceLifetime.Scoped);
 
-        // Services
+        // Services (Scoped para DBContext, Singleton los demas)
         services.AddSingleton<AuthService>();
         services.AddSingleton<ImageService>();
-        services.AddSingleton<ChecadorService>();
-        services.AddSingleton<PersonasService>();
-        services.AddSingleton<ReportesService>();
         services.AddSingleton<SettingsService>();
         services.AddSingleton<ExportService>();
-        services.AddSingleton<AdministradorService>();
+
+        // Scoped services para evitar DbContext concurrente
+        services.AddScoped<PersonasService>();
+        services.AddScoped<AdministradorService>();
+        services.AddScoped<ChecadorService>();
+        services.AddScoped<ReportesService>(_ => new ReportesService(connection));
 
         // ViewModels
         services.AddSingleton<PersonasViewModel>();

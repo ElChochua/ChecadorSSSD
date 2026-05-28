@@ -17,143 +17,88 @@ public class ChecadorService
     }
 
     /// <summary>
-    /// Marca la entrada o salida de una persona basándose en su número de matrícula.
-    /// Si la última acción fue 'Entrada', marca 'Salida'.
-    /// Si la última acción fue 'Salida' o no hay registros, marca 'Entrada'.
-    /// Además, lanza un mensaje de error correspondiente si se detecta que la matrícula
-    /// está vacía o la persona no existe en la base de datos.
+    /// Marca la entrada o salida de una persona bas�ndose en su n�mero de matr�cula.
+    /// Implementa debouncing y l�gica de turnos de 16 horas.
     /// </summary>
-    public async Task<(TipoAccion accion, string mensaje)> MarcarEntradaSalidaAsync(string matricula)
+    public async Task<(string tipo, string mensaje)> MarcarAsistenciaAsync(string matricula)
     {
-        // 1. Validar que la matrícula no esté vacía
+        // 1. Validar que la matr�cula no est� vac�a
         if (string.IsNullOrWhiteSpace(matricula))
         {
-            return (TipoAccion.Entrada, "La matrícula no puede estar vacía.");
+            return ("error", "La matr�cula no puede estar vac�a.");
         }
 
-        // 2. Buscar la persona por matrícula
+        // 2. Buscar la persona por matr�cula
         var persona = await _context.Personas
-            .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Matricula == matricula.Trim());
 
         if (persona == null)
         {
-            return (TipoAccion.Entrada, $"Persona con matrícula {matricula.Trim()} no encontrada.");
+            return ("error", $"Persona con matr�cula {matricula.Trim()} no encontrada.");
         }
 
         var ahora = DateTime.Now;
 
-        // 3. Determinar tipo de acción basado en el último registro de la persona
-        // Traer a memoria primero para usar c.Hora (NotMapped) sin problemas de traducción SQL
-        var ultimaAccion = (await _context.Checadores
-            .Where(c => c.Matricula == matricula.Trim())
-            .ToListAsync())
-            .OrderByDescending(c => c.Fecha)
-            .ThenByDescending(c => c.Hora)
-            .FirstOrDefault();
+        // 3. Buscar asistencia abierta m�s reciente (sin hora_salida)
+        var asistenciaAbierta = await _context.AsistenciasChecador
+            .Where(a => a.IdPersona == persona.IdPersona && a.HoraSalida == null)
+            .OrderByDescending(a => a.HoraEntrada)
+            .FirstOrDefaultAsync();
 
-        TipoAccion tipoAccion;
-        string mensaje;
-
-        if (ultimaAccion == null || ultimaAccion.EsSalida)
+        // 4. Si existe una asistencia abierta
+        if (asistenciaAbierta != null)
         {
-            tipoAccion = TipoAccion.Entrada;
-            mensaje = $"¡Bienvenido/a {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}! Entrada registrada.";
+            var tiempoTranscurrido = ahora - asistenciaAbierta.HoraEntrada;
+
+            // 5. Si el turno est� abierto desde hace m�s de 16 horas
+            if (tiempoTranscurrido.TotalHours > 16)
+            {
+                // Cerrar la asistencia anterior con estatus 'cerrado'
+                asistenciaAbierta.Estatus = "cerrado";
+                _context.AsistenciasChecador.Update(asistenciaAbierta);
+                await _context.SaveChangesAsync();
+
+                // Crear nueva entrada
+                var nuevaAsistencia = new AsistenciaChecador
+                {
+                    IdPersona = persona.IdPersona,
+                    HoraEntrada = ahora,
+                    HoraSalida = null,
+                    Estatus = null
+                };
+                _context.AsistenciasChecador.Add(nuevaAsistencia);
+                await _context.SaveChangesAsync();
+
+                return ("nueva", $"Entrada anterior no cerrada. Entrada nueva agregada para {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}.");
+            }
+
+            // 6. Verificar debouncing (m�s de 10 minutos desde la entrada)
+            if (tiempoTranscurrido.TotalMinutes < 10)
+            {
+                return ("info", "Entrada ya registrada. Espere a marcar la salida.");
+            }
+
+            // 7. Registrar salida
+            asistenciaAbierta.HoraSalida = ahora;
+            asistenciaAbierta.Estatus = "cerrado";
+            _context.AsistenciasChecador.Update(asistenciaAbierta);
+            await _context.SaveChangesAsync();
+
+            return ("salida", $"�Hasta luego {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}! Salida registrada.");
         }
-        else
-        {
-            tipoAccion = TipoAccion.Salida;
-            mensaje = $"¡Hasta luego {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}! Salida registrada.";
-        }
 
-        // 4. Crear y guardar el registro en Checadores con los datos de la persona
-        var checador = new Checadores
+        // 8. No existe asistencia abierta - crear nueva entrada
+        var asistenciaEntrada = new AsistenciaChecador
         {
-            TipoAccion = tipoAccion.ToString(),
-            Fecha = ahora.Date,
-            Hora = ahora.TimeOfDay,
-            Matricula = persona.Matricula,
-            Nombre = persona.Nombre,
-            ApellidoPaterno = persona.ApellidoPaterno,
-            ApellidoMaterno = persona.ApellidoMaterno,
-            TipoPersona = persona.TipoPersona
+            IdPersona = persona.IdPersona,
+            HoraEntrada = ahora,
+            HoraSalida = null,
+            Estatus = null
         };
 
-        _context.Checadores.Add(checador);
+        _context.AsistenciasChecador.Add(asistenciaEntrada);
         await _context.SaveChangesAsync();
 
-        return (tipoAccion, mensaje);
-    }
-
-    public async Task<string?> RegistrarEntradaForzadaAsync(string matricula)
-    {
-        if (string.IsNullOrWhiteSpace(matricula))
-        {
-            return "La matrícula no puede estar vacía.";
-        }
-
-        var persona = await _context.Personas
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Matricula == matricula.Trim());
-
-        if (persona == null)
-        {
-            return $"Persona con matrícula {matricula.Trim()} no encontrada.";
-        }
-
-        var ahora = DateTime.Now;
-
-        var checador = new Checadores
-        {
-            TipoAccion = TipoAccion.Entrada.ToString(),
-            Fecha = ahora.Date,
-            Hora = ahora.TimeOfDay,
-            Matricula = persona.Matricula,
-            Nombre = persona.Nombre,
-            ApellidoPaterno = persona.ApellidoPaterno,
-            ApellidoMaterno = persona.ApellidoMaterno,
-            TipoPersona = persona.TipoPersona
-        };
-
-        _context.Checadores.Add(checador);
-        await _context.SaveChangesAsync();
-
-        return $"Entrada registrada para {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}.";
-    }
-
-    public async Task<string?> RegistrarSalidaForzadaAsync(string matricula)
-    {
-        if (string.IsNullOrWhiteSpace(matricula))
-        {
-            return "La matrícula no puede estar vacía.";
-        }
-
-        var persona = await _context.Personas
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Matricula == matricula.Trim());
-
-        if (persona == null)
-        {
-            return $"Persona con matrícula {matricula.Trim()} no encontrada.";
-        }
-
-        var ahora = DateTime.Now;
-
-        var checador = new Checadores
-        {
-            TipoAccion = TipoAccion.Salida.ToString(),
-            Fecha = ahora.Date,
-            Hora = ahora.TimeOfDay,
-            Matricula = persona.Matricula,
-            Nombre = persona.Nombre,
-            ApellidoPaterno = persona.ApellidoPaterno,
-            ApellidoMaterno = persona.ApellidoMaterno,
-            TipoPersona = persona.TipoPersona
-        };
-
-        _context.Checadores.Add(checador);
-        await _context.SaveChangesAsync();
-
-        return $"Salida registrada para {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}.";
+        return ("entrada", $"�Bienvenido/a {persona.Nombre} {persona.ApellidoPaterno} {persona.ApellidoMaterno}! Entrada registrada.");
     }
 }
