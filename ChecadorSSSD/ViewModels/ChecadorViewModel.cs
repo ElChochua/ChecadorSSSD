@@ -66,17 +66,23 @@ public class ChecadorViewModel : ViewModelBase
         set => SetProperty(ref _logoPrograma, value);
     }
 
+    public bool HasLogoPrograma => LogoPrograma != null;
+
     public Bitmap? ImagenLugar
     {
         get => _imagenLugar;
         set => SetProperty(ref _imagenLugar, value);
     }
 
+    public bool HasImagenLugar => ImagenLugar != null;
+
     public Bitmap? ImagenUniversidad
     {
         get => _imagenUniversidad;
         set => SetProperty(ref _imagenUniversidad, value);
     }
+
+    public bool HasImagenUniversidad => ImagenUniversidad != null;
 
     public ICommand RegistrarCommand { get; }
 
@@ -114,8 +120,13 @@ public class ChecadorViewModel : ViewModelBase
         try
         {
             LogoPrograma = _imageService.LoadImage(_imageService.LogoChecadorPath);
+            OnPropertyChanged(nameof(HasLogoPrograma));
+
             ImagenLugar = _imageService.LoadImage(_imageService.ImagenLugarPath);
+            OnPropertyChanged(nameof(HasImagenLugar));
+
             ImagenUniversidad = _imageService.LoadImage(_imageService.ImagenUniversidadPath);
+            OnPropertyChanged(nameof(HasImagenUniversidad));
         }
         catch { /* En caso de que no haya imagenes configuradas, quedan en null */ }
     }

@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ChecadorSSSD.Views.AdministracionView"
              x:DataType="vm:AdministracionViewModel"
-             xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+              xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
               xmlns:models="clr-namespace:ChecadorSSSD.Models"
               xmlns:services="clr-namespace:ChecadorSSSD.Services"
              HorizontalAlignment="Stretch"
@@ -11,59 +11,79 @@
         <!-- Login Panel -->
         <Border Grid.Row="0"
                 IsVisible="{Binding !Autenticado}"
-                Background="{StaticResource BrushAzulMarinoMedio}"
-                CornerRadius="24"
+                Background="{StaticResource BrushAzulFondoCont}"
+                BorderBrush="{StaticResource BrushCappuccino}"
+                BorderThickness="1"
+                CornerRadius="4"
                 Padding="48,32"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 MaxWidth="400"
                 Margin="0,40,0,0">
-            <StackPanel Spacing="16">
-                <TextBlock Text="Administracion" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}" HorizontalAlignment="Center"/>
-                <TextBlock Text="Inicia sesion para continuar" FontSize="14" Foreground="{StaticResource BrushGrisTextoClaro}" HorizontalAlignment="Center"/>
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Usuario" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/>
-                    <TextBox Text="{Binding UsuarioLogin}" PlaceholderText="Usuario" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
+            <StackPanel Spacing="24" HorizontalAlignment="Stretch">
+                <!-- Logo/Icono -->
+                <StackPanel Spacing="16" HorizontalAlignment="Center">
+                    <Image Source="avares://ChecadorSSSD/Assets/Icons/lock.png" Width="48" Height="48"/>
+                    <TextBlock Text="Administracion" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Acceso restringido a personal autorizado" FontSize="14" Foreground="{StaticResource BrushGrisTextoClaro}" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Contrasena" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/>
-                    <TextBox Text="{Binding PassLogin}" PasswordChar="*" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
+
+                <!-- Campos de login -->
+                <StackPanel Spacing="16" HorizontalAlignment="Stretch">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Usuario" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/>
+                        <TextBox Text="{Binding UsuarioLogin}" PlaceholderText="Ingrese su usuario" FontSize="14" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CaretBrush="{StaticResource BrushBlanco}" Height="42" CornerRadius="2" Padding="14,0,14,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Contrasena" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/>
+                        <TextBox Text="{Binding PassLogin}" PasswordChar="*" PlaceholderText="Ingrese su contrasena" FontSize="14" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CaretBrush="{StaticResource BrushBlanco}" Height="42" CornerRadius="2" Padding="14,0,14,0" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
                 </StackPanel>
-                <!-- Mensaje -->
-                <Border Background="{StaticResource BrushRojoError}" CornerRadius="6" Padding="12,8" IsVisible="{Binding MostrarMensajeLogin}">
+
+                <!-- Mensaje de error -->
+                <Border Background="{StaticResource BrushRojoError}" CornerRadius="2" Padding="12,8" IsVisible="{Binding MostrarMensajeLogin}" HorizontalAlignment="Stretch">
                     <TextBlock Text="{Binding MensajeLogin}" FontSize="12" Foreground="{StaticResource BrushBlanco}" TextWrapping="Wrap"/>
                 </Border>
-                <Button Command="{Binding LoginCommand}" Content="Iniciar Sesion" Height="40" HorizontalAlignment="Stretch" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" FontWeight="SemiBold" CornerRadius="8"/>
+
+                <!-- Boton login -->
+                <Button Command="{Binding LoginCommand}" Height="48" FontSize="16" FontWeight="Bold" CornerRadius="2" HorizontalAlignment="Stretch" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}">
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <TextBlock Text="Iniciar Sesion" VerticalAlignment="Center"/>
+                        <Image Source="avares://ChecadorSSSD/Assets/Icons/forward.png" Width="20" Height="20" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
+
         <!-- Admin Panel -->
-        <Grid Grid.Row="1" IsVisible="{Binding Autenticado}" RowDefinitions="Auto,*">
+        <Grid Grid.Row="1" IsVisible="{Binding Autenticado}"
+              RowDefinitions="Auto,*">
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
-                <TextBlock Grid.Column="0" Text="{Binding UsuarioLogin, StringFormat='Bienvenido, {0}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}" VerticalAlignment="Center"/>
-                <Button Grid.Column="1" Command="{Binding LogoutCommand}" Content="Cerrar Sesion" Height="36" Padding="12,0" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="Bienvenid@" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Command="{Binding LogoutCommand}" Content="Cerrar Sesion" Height="36" Padding="14,0" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </Grid>
             <TabControl Grid.Row="1" Background="Transparent">
                 <TabItem Header="Personas" Foreground="{StaticResource BrushBlanco}">
                     <Grid ColumnDefinitions="*,400">
                         <Grid Grid.Column="0" RowDefinitions="Auto,*">
                             <Grid Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
-                                <TextBox Grid.Column="0" Text="{Binding BusquedaAdmin}" PlaceholderText="Buscar persona..." Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
-                                <Button Grid.Column="1" Command="{Binding NuevoPersonaCommand}" Content="+ Nuevo" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" Height="36" Padding="12,0" Margin="8,0,0,0" CornerRadius="6" FontWeight="SemiBold"/>
+                                <TextBox Grid.Column="0" Text="{Binding BusquedaAdmin}" PlaceholderText="Buscar persona..." Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                                <Button Grid.Column="1" Command="{Binding NuevoPersonaCommand}" Content="+ Nuevo" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" Height="36" Padding="12,0" Margin="8,0,0,0" CornerRadius="2" FontWeight="SemiBold"/>
                             </Grid>
-                            <Border Grid.Row="1" Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="12">
+                            <Border Grid.Row="1" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="12">
                                 <ListBox ItemsSource="{Binding Personas}" Background="Transparent" BorderThickness="0">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate DataType="models:Personas">
-                                            <Border Background="{StaticResource BrushAzulMarinoClaro}" CornerRadius="8" Padding="12,8" Margin="0,4">
+                                            <Border Background="{StaticResource BrushAzulMarino}" Padding="12,8" Margin="0,4" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1">
                                                 <Grid ColumnDefinitions="*,Auto">
                                                     <StackPanel Grid.Column="0" Spacing="2">
-                                                        <TextBlock Text="{Binding Nombre}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
+                                                        <TextBlock Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
                                                         <TextBlock Text="{Binding Matricula}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="12"/>
                                                         <TextBlock Text="{Binding TipoPersona}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/>
                                                     </StackPanel>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-                                                        <Button Content="E" Command="{Binding $parent[ListBox].DataContext.EditarCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushBlanco}" Height="28" FontSize="10" Padding="4,0" CornerRadius="4" ToolTip.Tip="Editar"/>
-                                                        <Button Content="X" Command="{Binding $parent[ListBox].DataContext.EliminarCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushRojoError}" Height="28" FontSize="10" Padding="4,0" CornerRadius="4" ToolTip.Tip="Eliminar"/>
+                                                        <Button Content="E" Command="{Binding $parent[ListBox].DataContext.EditarCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushBlanco}" Height="28" FontSize="10" Padding="4,0" CornerRadius="2" ToolTip.Tip="Editar"/>
+                                                        <Button Content="X" Command="{Binding $parent[ListBox].DataContext.EliminarCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushRojoError}" Height="28" FontSize="10" Padding="4,0" CornerRadius="2" ToolTip.Tip="Eliminar"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -74,17 +94,17 @@
                         </Grid>
                         <!-- Formulario de edicion -->
                         <Grid Grid.Column="1" Margin="16,0,0,0">
-                            <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="20">
+                            <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="20">
                                 <StackPanel Spacing="12">
                                     <TextBlock Text="{Binding TituloFormulario}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushBlanco}" Margin="0,0,0,8"/>
-                                    <StackPanel Spacing="4"><TextBlock Text="Nombre" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding PersonaEnEdicion.Nombre}" PlaceholderText="Nombre" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
-                                    <StackPanel Spacing="4"><TextBlock Text="Apellido Paterno" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding PersonaEnEdicion.ApellidoPaterno}" PlaceholderText="Apellido Paterno" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
-                                    <StackPanel Spacing="4"><TextBlock Text="Apellido Materno" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding PersonaEnEdicion.ApellidoMaterno}" PlaceholderText="Apellido Materno" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
-                                    <StackPanel Spacing="4"><TextBlock Text="Matricula" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding PersonaEnEdicion.Matricula}" PlaceholderText="Matricula" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
-                                    <StackPanel Spacing="4"><TextBlock Text="Tipo" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><ComboBox ItemsSource="{Binding TiposUsuario}" SelectedItem="{Binding PersonaEnEdicion.TipoPersona}" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Nombre" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding PersonaEnEdicion.Nombre}" PlaceholderText="Nombre" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Apellido Paterno" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding PersonaEnEdicion.ApellidoPaterno}" PlaceholderText="Apellido Paterno" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Apellido Materno" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding PersonaEnEdicion.ApellidoMaterno}" PlaceholderText="Apellido Materno" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Matricula" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding PersonaEnEdicion.Matricula}" PlaceholderText="Matricula" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Tipo" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><ComboBox ItemsSource="{Binding TiposUsuario}" SelectedItem="{Binding PersonaEnEdicion.TipoPersona}" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
                                     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
-                                        <Button Command="{Binding GuardarCommand}" Content="Guardar" Height="40" Padding="24,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="8" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
-                                        <Button Command="{Binding CancelarCommand}" Content="Cancelar" Height="40" Padding="24,0" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="8" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
+                                        <Button Command="{Binding GuardarCommand}" Content="Guardar" Height="40" Padding="24,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
+                                        <Button Command="{Binding CancelarCommand}" Content="Cancelar" Height="40" Padding="24,0" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>
@@ -96,15 +116,15 @@
                         <Grid Grid.Row="0" ColumnDefinitions="*,300" Margin="0,0,0,12">
                             <StackPanel Grid.Column="0" Spacing="8">
                                 <TextBlock Text="Seleccionar Personas para el Reporte" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                                <TextBox Text="{Binding BusquedaPersonasReporte, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Buscar personas..." Width="300" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
-                                <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="8" Padding="8" MaxHeight="200">
+                                <TextBox Text="{Binding BusquedaPersonasReporte, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Buscar personas..." Width="300" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                                <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="2" Padding="8" MaxHeight="200">
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <ItemsControl ItemsSource="{Binding PersonasFiltradasReporte}" Background="Transparent">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate DataType="models:Personas">
                                                     <Grid ColumnDefinitions="*,Auto" Margin="0,2">
                                                         <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center"/>
-                                                        <Button Grid.Column="1" Content="+" Command="{Binding $parent[ItemsControl].DataContext.AgregarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="4" FontSize="10" FontWeight="Bold"/>
+                                                        <Button Grid.Column="1" Content="+" Command="{Binding $parent[ItemsControl].DataContext.AgregarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="2" FontSize="10" FontWeight="Bold"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -114,14 +134,14 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Spacing="8" Margin="8,0,0,0">
                                 <TextBlock Text="Personas Seleccionadas" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                                <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="8" Padding="8" MaxHeight="200">
+                                <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="2" Padding="8" MaxHeight="200">
                                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                                         <ItemsControl ItemsSource="{Binding PersonasSeleccionadasReporte}" Background="Transparent">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate DataType="models:Personas">
                                                     <Grid ColumnDefinitions="*,Auto" Margin="0,2">
                                                         <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center"/>
-                                                        <Button Grid.Column="1" Content="-" Command="{Binding $parent[ItemsControl].DataContext.QuitarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="4" FontSize="10" FontWeight="Bold"/>
+                                                        <Button Grid.Column="1" Content="-" Command="{Binding $parent[ItemsControl].DataContext.QuitarPersonaReporteCommand}" CommandParameter="{Binding}" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" Height="24" Width="24" CornerRadius="2" FontSize="10" FontWeight="Bold"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
@@ -131,32 +151,32 @@
                             </StackPanel>
                         </Grid>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
-                            <ComboBox ItemsSource="{Binding TiposReporte}" SelectedItem="{Binding TipoReporteSeleccionado}" PlaceholderText="Tipo de reporte..." Width="200" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
-                            <DatePicker SelectedDate="{Binding FechaInicioReporte}" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6"/>
-                            <DatePicker SelectedDate="{Binding FechaFinReporte}" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6"/>
-                            <Button Command="{Binding GenerarReporteIndividuaCommand}" Content="Generar Reporte" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold"/>
+                            <ComboBox ItemsSource="{Binding TiposReporte}" SelectedItem="{Binding TipoReporteSeleccionado}" PlaceholderText="Tipo de reporte..." Width="200" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                            <DatePicker SelectedDate="{Binding FechaInicioReporte}" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2"/>
+                            <DatePicker SelectedDate="{Binding FechaFinReporte}" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2"/>
+                            <Button Command="{Binding GenerarReporteIndividuaCommand}" Content="Generar Reporte" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold"/>
                         </StackPanel>
                         <!-- Busqueda + Paginador -->
-                        <Border Grid.Row="2" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8" Padding="8,4" Margin="0,0,0,12">
+                        <Border Grid.Row="2" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="2" Padding="8,4" Margin="0,0,0,12">
                             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                <TextBox Text="{Binding BusquedaReporte}" PlaceholderText="Buscar..." Width="200" Height="32" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="4" Padding="8,0" VerticalContentAlignment="Center" FontSize="12"/>
-                                <Button Content="Anterior" Command="{Binding PaginaAnteriorCommand}" Padding="8,2" Background="Transparent" Foreground="{StaticResource BrushGrisTextoClaro}" BorderBrush="{StaticResource BrushAzulMarinoClaro}" BorderThickness="0" FontSize="12"/>
+                                <TextBox Text="{Binding BusquedaReporte}" PlaceholderText="Buscar..." Width="200" Height="32" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="8,0" VerticalContentAlignment="Center" FontSize="12"/>
+                                <Button Content="Anterior" Command="{Binding PaginaAnteriorCommand}" Padding="8,2" Background="Transparent" Foreground="{StaticResource BrushGrisTextoClaro}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0" FontSize="12"/>
                                 <TextBlock Text="{Binding RangoPaginaText}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" VerticalAlignment="Center" Padding="8,0"/>
-                                <Button Content="Siguiente" Command="{Binding PaginaSiguienteCommand}" Padding="8,2" Background="Transparent" Foreground="{StaticResource BrushGrisTextoClaro}" BorderBrush="{StaticResource BrushAzulMarinoClaro}" BorderThickness="0" FontSize="12"/>
+                                <Button Content="Siguiente" Command="{Binding PaginaSiguienteCommand}" Padding="8,2" Background="Transparent" Foreground="{StaticResource BrushGrisTextoClaro}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0" FontSize="12"/>
                             </StackPanel>
                         </Border>
                         <!-- Resultados HORAS -->
                         <Grid Grid.Row="3" IsVisible="{Binding MostrarResultadosHoras}">
                             <Grid RowDefinitions="Auto,*">
-                                <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8,8,0,0" Padding="12,8">
+                                <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1" Padding="12,8">
                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*">
-                                        <TextBlock Grid.Column="0" Text="Nombre Completo" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="Matricula" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="2" Text="Rol" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="3" Text="Asistencias" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="4" Text="Entradas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="5" Text="Salidas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="6" Text="Horas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center"/>
+                                        <Button Grid.Column="0" Content="Nombre Completo" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="1" Content="Matricula" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="2" Content="Rol" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="3" Content="Asistencias" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="4" Content="Entradas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="5" Content="Salidas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
+                                        <Button Grid.Column="6" Content="Horas" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="4,8" HorizontalAlignment="Center" Background="Transparent"/>
                                     </Grid>
                                 </Border>
                                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -167,8 +187,8 @@
                                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*">
                                                         <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="200"/>
                                                         <TextBlock Grid.Column="1" Text="{Binding Matricula}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                                        <Border Grid.Column="2" Background="{StaticResource BrushVerdeExito}" CornerRadius="4" Padding="6,2" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                            <TextBlock Text="{Binding Rol}" Foreground="{StaticResource BrushBlanco}" FontSize="10" FontWeight="SemiBold"/>
+                                                        <Border Grid.Column="2" Background="{StaticResource BrushAzulMarino}" Padding="6,2" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="2">
+                                                            <TextBlock Text="{Binding Rol}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="10" FontWeight="SemiBold"/>
                                                         </Border>
                                                         <TextBlock Grid.Column="3" Text="{Binding TotalAsistencias}" Foreground="{StaticResource BrushVerdeExito}" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         <TextBlock Grid.Column="4" Text="{Binding TotalEntradas}" Foreground="{StaticResource BrushRojoError}" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -188,7 +208,7 @@
                         <!-- Resultados USUARIOS -->
                         <Grid Grid.Row="3" IsVisible="{Binding MostrarResultadosUsuarios}">
                             <Grid RowDefinitions="Auto,*">
-                                <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8,8,0,0" Padding="12,8">
+                                <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1" Padding="12,8">
                                     <Grid ColumnDefinitions="*,*,*,*,*,*,*,*,*,*">
                                         <TextBlock Grid.Column="0" Text="Matricula" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="2,8" HorizontalAlignment="Center"/>
                                         <TextBlock Grid.Column="1" Text="Nombre" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Bold" Padding="2,8" HorizontalAlignment="Center"/>
@@ -216,7 +236,7 @@
                                                         <TextBlock Grid.Column="5" Text="{Binding HoraEntrada}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                                         <TextBlock Grid.Column="6" Text="{Binding HoraSalida}" Foreground="{StaticResource BrushRojoError}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                                         <TextBlock Grid.Column="7" Text="{Binding HorasDiarias}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                                        <Border Grid.Column="8" Background="{StaticResource BrushDoradoUniversidad}" CornerRadius="4" Padding="4,2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                        <Border Grid.Column="8" Background="{StaticResource BrushDoradoUniversidad}" CornerRadius="2" Padding="4,2" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                             <TextBlock Text="{Binding ClasificacionHoras}" Foreground="{StaticResource BrushNegro}" FontSize="10" FontWeight="SemiBold"/>
                                                         </Border>
                                                         <TextBlock Grid.Column="9" Text="{Binding HorasTrabajadas}" Foreground="{StaticResource BrushBlanco}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"/>
@@ -236,33 +256,33 @@
                         <StackPanel Grid.Row="1" Spacing="8" Margin="0,0,0,16">
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="{Binding RutaLogo}" VerticalAlignment="Center" Foreground="{StaticResource BrushBlanco}" FontSize="12" TextTrimming="CharacterEllipsis" Width="200"/>
-                                <Button Content="Seleccionar Logo" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold" Click="SeleccionarLogo_Click"/>
+                                <Button Content="Seleccionar Logo" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" Click="SeleccionarLogo_Click"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="{Binding RutaLugar}" VerticalAlignment="Center" Foreground="{StaticResource BrushBlanco}" FontSize="12" TextTrimming="CharacterEllipsis" Width="200"/>
-                                <Button Content="Seleccionar Lugar" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold" Click="SeleccionarLugar_Click"/>
+                                <Button Content="Seleccionar Lugar" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" Click="SeleccionarLugar_Click"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Spacing="8">
                                 <TextBlock Text="{Binding RutaUniversidad}" VerticalAlignment="Center" Foreground="{StaticResource BrushBlanco}" FontSize="12" TextTrimming="CharacterEllipsis" Width="200"/>
-                                <Button Content="Seleccionar Universidad" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold" Click="SeleccionarUniversidad_Click"/>
+                                <Button Content="Seleccionar Universidad" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" Click="SeleccionarUniversidad_Click"/>
                             </StackPanel>
                         </StackPanel>
-                        <Border Grid.Row="2" Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="12">
+                        <Border Grid.Row="2" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="12">
                             <StackPanel Spacing="8">
                                 <TextBlock Text="Carrusel Sidebar" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <TextBox Text="{Binding NombreImagenCarrusel}" PlaceholderText="Nombre..." Width="150" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/>
+                                    <TextBox Text="{Binding NombreImagenCarrusel}" PlaceholderText="Nombre..." Width="150" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
                                     <TextBlock Text="{Binding RutaImagenCarrusel}" VerticalAlignment="Center" Foreground="{StaticResource BrushBlanco}" FontSize="12" TextTrimming="CharacterEllipsis" Width="150"/>
-                                    <Button Content="Seleccionar" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="6" FontWeight="SemiBold" Click="SeleccionarImagenCarrusel_Click"/>
-                                    <Button Command="{Binding AgregarImagenCarruselCommand}" Content="+" Height="36" Width="36" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" FontWeight="SemiBold"/>
+                                    <Button Content="Seleccionar" Height="36" Padding="12,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" Click="SeleccionarImagenCarrusel_Click"/>
+                                    <Button Command="{Binding AgregarImagenCarruselCommand}" Content="+" Height="36" Width="36" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontWeight="SemiBold"/>
                                 </StackPanel>
                                 <ListBox ItemsSource="{Binding ImagenesCarrusel}" Background="Transparent" BorderThickness="0" MaxHeight="180">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Background="{StaticResource BrushAzulMarinoClaro}" CornerRadius="6" Padding="8,4" Margin="0,2" PointerPressed="CarruselItem_PointerPressed">
+                                            <Border Background="{StaticResource BrushAzulMarino}" Padding="8,4" Margin="0,2" PointerPressed="CarruselItem_PointerPressed" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1">
                                                 <Grid ColumnDefinitions="*,Auto">
                                                     <TextBlock Grid.Column="0" Text="{Binding Nombre}" Foreground="{StaticResource BrushBlanco}" FontSize="12"/>
-                                                    <Button Grid.Column="1" Command="{Binding $parent[ListBox].DataContext.EliminarImagenCarruselCommand}" CommandParameter="{Binding}" Content="x" Height="20" Width="20" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" CornerRadius="4" FontSize="10" Padding="0" FontWeight="Bold"/>
+                                                    <Button Grid.Column="1" Command="{Binding $parent[ListBox].DataContext.EliminarImagenCarruselCommand}" CommandParameter="{Binding}" Content="x" Height="20" Width="20" Background="{StaticResource BrushRojoError}" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontSize="10" Padding="0" FontWeight="Bold"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -278,19 +298,19 @@
                             <Grid Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
                                 <TextBlock Grid.Column="0" Text="Administradores registrados" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}" Margin="0,0,0,8"/>
                             </Grid>
-                            <Border Grid.Row="1" Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="12">
+                            <Border Grid.Row="1" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="12">
                                 <ListBox ItemsSource="{Binding Administradores}" Background="Transparent" BorderThickness="0">
                                     <ListBox.ItemTemplate>
-                                         <DataTemplate DataType="models:Administrador">
-                                             <Border Background="{StaticResource BrushAzulMarinoClaro}" CornerRadius="8" Padding="12,8" Margin="0,4">
-                                                 <Grid ColumnDefinitions="*,Auto">
-                                                     <StackPanel Grid.Column="0" Spacing="2">
-                                                         <TextBlock Text="{Binding Usuario}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
+                                        <DataTemplate DataType="models:Administrador">
+                                            <Border Background="{StaticResource BrushAzulMarino}" Padding="12,8" Margin="0,4" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <StackPanel Grid.Column="0" Spacing="2">
+                                                        <TextBlock Text="{Binding Usuario}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14"/>
                                                         <TextBlock Text="{Binding IdAdmin, StringFormat='ID: {0}'}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/>
                                                     </StackPanel>
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-                                                        <Button Content="E" Command="{Binding $parent[ListBox].DataContext.EditarAdminCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushBlanco}" Height="28" FontSize="10" Padding="4,0" CornerRadius="4" ToolTip.Tip="Editar"/>
-                                                        <Button Content="X" Command="{Binding $parent[ListBox].DataContext.EliminarAdminCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushRojoError}" Height="28" FontSize="10" Padding="4,0" CornerRadius="4" ToolTip.Tip="Eliminar"/>
+                                                        <Button Content="E" Command="{Binding $parent[ListBox].DataContext.EditarAdminCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushBlanco}" Height="28" FontSize="10" Padding="4,0" CornerRadius="2" ToolTip.Tip="Editar"/>
+                                                        <Button Content="X" Command="{Binding $parent[ListBox].DataContext.EliminarAdminCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="{StaticResource BrushRojoError}" Height="28" FontSize="10" Padding="4,0" CornerRadius="2" ToolTip.Tip="Eliminar"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -300,14 +320,14 @@
                             </Border>
                         </Grid>
                         <Grid Grid.Column="1" Margin="16,0,0,0">
-                            <Border Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="20">
+                            <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="20">
                                 <StackPanel Spacing="12">
                                     <TextBlock Text="{Binding TituloFormularioAdmin}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushBlanco}" Margin="0,0,0,8"/>
-                                    <StackPanel Spacing="4"><TextBlock Text="Usuario" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding AdminEnEdicion.Usuario}" PlaceholderText="Usuario" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
-                                    <StackPanel Spacing="4"><TextBlock Text="Contrasenia" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11"/><TextBox Text="{Binding AdminEnEdicion.Contrasenia}" PasswordChar="*" PlaceholderText="Contrasenia" Height="36" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="6" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Usuario" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding AdminEnEdicion.Usuario}" PlaceholderText="Usuario" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
+                                    <StackPanel Spacing="4"><TextBlock Text="Contrasenia" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="Medium"/><TextBox Text="{Binding AdminEnEdicion.Contrasenia}" PasswordChar="*" PlaceholderText="Contrasenia" Height="36" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/></StackPanel>
                                     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,0">
-                                        <Button Command="{Binding GuardarAdminCommand}" Content="Guardar" Height="40" Padding="24,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="8" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
-                                        <Button Command="{Binding CancelarAdminCommand}" Content="Cancelar" Height="40" Padding="24,0" Background="{StaticResource BrushAzulMarinoClaro}" Foreground="{StaticResource BrushBlanco}" CornerRadius="8" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
+                                        <Button Command="{Binding GuardarAdminCommand}" Content="Guardar" Height="40" Padding="24,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
+                                        <Button Command="{Binding CancelarAdminCommand}" Content="Cancelar" Height="40" Padding="24,0" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Stretch"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

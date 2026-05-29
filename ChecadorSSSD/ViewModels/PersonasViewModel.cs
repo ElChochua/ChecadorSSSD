@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
 using ChecadorSSSD.Models;
 using ChecadorSSSD.Services;
 
@@ -23,6 +24,15 @@ public class PersonasViewModel : ViewModelBase
     private string _mensaje = string.Empty;
     private bool _esError;
     private bool _mostrarMensaje;
+
+    // Paginacion
+    private int _paginaActual = 1;
+    private const int RegistrosPorPagina = 50;
+    private int _totalRegistros = 0;
+
+    // Modal inline
+    private Personas? _personaEnModal;
+    private bool _mostrarModal = false;
 
     public List<Personas> Personas
     {
@@ -49,7 +59,9 @@ public class PersonasViewModel : ViewModelBase
         {
             if (SetProperty(ref _busqueda, value))
             {
+                _paginaActual = 1;
                 FiltrarPersonas();
+                OnPropertyChanged(nameof(RangoPaginaText));
             }
         }
     }
@@ -72,24 +84,78 @@ public class PersonasViewModel : ViewModelBase
         set => SetProperty(ref _mostrarMensaje, value);
     }
 
+    // Paginacion
+    public int TotalPaginas => Math.Max(1, (int)Math.Ceiling((double)_totalRegistros / RegistrosPorPagina));
+
+    public string RangoPaginaText => $"Pagina {_paginaActual} de {TotalPaginas} (Total: {_totalRegistros})";
+
+    public bool PaginaAnteriorPuedeEjecutarse => _paginaActual > 1;
+    public bool PaginaSiguientePuedeEjecutarse => _paginaActual < TotalPaginas;
+
+    // Modal inline
+    public Personas? PersonaEnModal
+    {
+        get => _personaEnModal;
+        set
+        {
+            if (SetProperty(ref _personaEnModal, value))
+            {
+                MostrarModal = _personaEnModal != null;
+            }
+        }
+    }
+
+    public bool MostrarModal
+    {
+        get => _mostrarModal;
+        set => SetProperty(ref _mostrarModal, value);
+    }
+
     // Comandos
     public ICommand VerCommand { get; }
     public ICommand CopiarMatriculaCommand { get; }
+    public ICommand PaginaAnteriorCommand { get; }
+    public ICommand PaginaSiguienteCommand { get; }
+    public ICommand CerrarModalCommand { get; }
 
     public PersonasViewModel(PersonasService personasService)
     {
         _personasService = personasService;
 
-        VerCommand = new RelayCommand<Personas>(async (persona) =>
+        VerCommand = new RelayCommand<Personas>((persona) =>
         {
-            if (persona == null) return;
-            await VerPersonaAsync(persona);
+            if (persona != null) PersonaEnModal = persona;
         });
 
         CopiarMatriculaCommand = new RelayCommand<Personas>(async (persona) =>
         {
             if (persona == null || string.IsNullOrEmpty(persona.Matricula)) return;
             await CopiarMatriculaAsync(persona.Matricula);
+        });
+
+        PaginaAnteriorCommand = new RelayCommand(() =>
+        {
+            if (_paginaActual > 1)
+            {
+                _paginaActual--;
+                FiltrarPersonas();
+                OnPropertyChanged(nameof(RangoPaginaText));
+            }
+        }, () => _paginaActual > 1);
+
+        PaginaSiguienteCommand = new RelayCommand(() =>
+        {
+            if (_paginaActual < TotalPaginas)
+            {
+                _paginaActual++;
+                FiltrarPersonas();
+                OnPropertyChanged(nameof(RangoPaginaText));
+            }
+        }, () => _paginaActual < TotalPaginas);
+
+        CerrarModalCommand = new RelayCommand(() =>
+        {
+            PersonaEnModal = null;
         });
 
         _ = CargarPersonasAsync();
@@ -101,6 +167,8 @@ public class PersonasViewModel : ViewModelBase
         {
             _todasLasPersonas = await _personasService.ObtenerTodasAsync();
             Personas = new List<Personas>(_todasLasPersonas);
+            _totalRegistros = Personas.Count;
+            OnPropertyChanged(nameof(RangoPaginaText));
         }
         catch (Exception ex)
         {
@@ -110,44 +178,34 @@ public class PersonasViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Actualiza la lista si se agrega un usuario desde administracion.
+    /// </summary>
+    public void RecargarPersonas()
+    {
+        _ = CargarPersonasAsync();
+    }
+
     private void FiltrarPersonas()
     {
         if (string.IsNullOrWhiteSpace(Busqueda))
         {
-            Personas = new List<Personas>(_todasLasPersonas);
+            Personas = new List<Personas>(_todasLasPersonas.Skip((_paginaActual - 1) * RegistrosPorPagina).Take(RegistrosPorPagina));
+            _totalRegistros = _todasLasPersonas.Count;
             return;
         }
 
         var filtro = Busqueda.ToLower();
-        Personas = _todasLasPersonas
-            .Where(p => 
+        var filtradas = _todasLasPersonas
+            .Where(p =>
                 p.Nombre.ToLower().Contains(filtro) ||
-                p.ApellidoPaterno.ToLower().Contains(filtro) ||
-                p.ApellidoMaterno.ToLower().Contains(filtro) ||
+                p.ApellidoPaterno?.ToLower().Contains(filtro) == true ||
+                p.ApellidoMaterno?.ToLower().Contains(filtro) == true ||
                 p.Matricula.ToLower().Contains(filtro))
             .ToList();
-    }
 
-    private async Task VerPersonaAsync(Personas persona)
-    {
-        try
-        {
-            var dialog = new Views.VerPersonaView(persona);
-            if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
-            {
-                await dialog.ShowDialog(desktop.MainWindow);
-            }
-            else
-            {
-                dialog.Show();
-            }
-        }
-        catch (Exception ex)
-        {
-            Mensaje = $"Error al abrir detalle: {ex.Message}";
-            EsError = true;
-            MostrarMensaje = true;
-        }
+        _totalRegistros = filtradas.Count;
+        Personas = new List<Personas>(filtradas.Skip((_paginaActual - 1) * RegistrosPorPagina).Take(RegistrosPorPagina));
     }
 
     private async Task CopiarMatriculaAsync(string matricula)

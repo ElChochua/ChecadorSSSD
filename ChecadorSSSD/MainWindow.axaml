@@ -15,101 +15,157 @@
 
     <Grid ColumnDefinitions="250,*">
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="{StaticResource BrushAzulMarinoSidebar}" Padding="0,24">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto">
-                <!-- Titulo -->
-                <TextBlock Grid.Row="0" Text="CHECADOR"
-                           FontSize="24" FontWeight="Bold"
-                           Foreground="{StaticResource BrushDoradoUniversidad}"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,24"/>
+        <Border Grid.Column="0"
+                Background="{StaticResource BrushAzulMarinoSidebar}"
+                BorderBrush="{StaticResource BrushCappuccino}"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <!-- Parte superior: Logo + Carrusel -->
+                <Grid Grid.Row="0" RowDefinitions="Auto,Auto">
+                    <!-- Logo del programa -->
+                    <Border Grid.Row="0"
+                            Background="{StaticResource BrushAzulFondoCont}"
+                            CornerRadius="4"
+                            Padding="12"
+                            Margin="12,12,12,8"
+                            BorderBrush="{StaticResource BrushCappuccino}"
+                            BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                            <Image Source="{Binding LogoSidebar}"
+                                   Width="28"
+                                   Height="28"
+                                   VerticalAlignment="Center"
+                                   IsVisible="{Binding HasLogoSidebar}"/>
+                            <TextBlock Text="Checador"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushDoradoUniversidad}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <!-- Carrusel compacto -->
+                    <Border Grid.Row="1"
+                            Background="{StaticResource BrushAzulFondoCont}"
+                            CornerRadius="4"
+                            Padding="8"
+                            Margin="12,0,12,8"
+                            BorderBrush="{StaticResource BrushCappuccino}"
+                            BorderThickness="1"
+                            MaxHeight="140">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0"
+                                       Text="{Binding CarruselTituloActual}"
+                                       Foreground="{StaticResource BrushDoradoUniversidad}"
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,4"
+                                       TextTrimming="CharacterEllipsis"
+                                       TextWrapping="NoWrap" />
+                            <Border Grid.Row="1"
+                                    Background="{StaticResource BrushAzulMarino}"
+                                    CornerRadius="2">
+                                <Image Source="{Binding CarruselImagenActual}"
+                                       Stretch="Uniform"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
 
-                <!-- Botones navegacion -->
-                <Button Grid.Row="1" Command="{Binding NavigateToChecadorCommand}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Padding="24,16" Background="Transparent" Cursor="Hand">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="Q" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                        <TextBlock Text="Checador" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
-                    </StackPanel>
-                </Button>
-                <Button Grid.Row="2" Command="{Binding NavigateToPersonasCommand}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Padding="24,16" Background="Transparent" Cursor="Hand">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="P" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                        <TextBlock Text="Personas" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
-                    </StackPanel>
-                </Button>
-                <Button Grid.Row="3" Command="{Binding NavigateToReportesCommand}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Padding="24,16" Background="Transparent" Cursor="Hand">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="R" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                        <TextBlock Text="Reportes" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
-                    </StackPanel>
-                </Button>
+                <!-- Centro: Navegacion -->
+                <StackPanel Grid.Row="1"
+                            Orientation="Vertical"
+                            Spacing="4"
+                            VerticalAlignment="Center"
+                            Margin="12,0">
+                    <Button Command="{Binding NavigateToChecadorCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="16,12"
+                            Background="Transparent"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Source="avares://ChecadorSSSD/Assets/Icons/clock.png" Width="22" Height="22" VerticalAlignment="Center"/>
+                            <TextBlock Text="Checador"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToPersonasCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="16,12"
+                            Background="Transparent"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Source="avares://ChecadorSSSD/Assets/Icons/people.png" Width="22" Height="22" VerticalAlignment="Center"/>
+                            <TextBlock Text="Personas"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToReportesCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="16,12"
+                            Background="Transparent"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Source="avares://ChecadorSSSD/Assets/Icons/chart.png" Width="22" Height="22" VerticalAlignment="Center"/>
+                            <TextBlock Text="Reportes"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateToAdministracionCommand}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="16,12"
+                            Background="Transparent"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Source="avares://ChecadorSSSD/Assets/Icons/settings.png" Width="22" Height="22" VerticalAlignment="Center"/>
+                            <TextBlock Text="Administracion"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
-                <!-- Carrusel de imagenes (area restante) -->
-                <Border Grid.Row="4"
-                        Background="{StaticResource BrushAzulMarinoMedio}"
-                        CornerRadius="12"
-                        Padding="8"
-                        Margin="12,16,12,16"
-                        VerticalAlignment="Stretch">
-                    <Grid RowDefinitions="Auto,*">
-                        <TextBlock Grid.Row="0"
-                                   Text="{Binding CarruselTituloActual}"
-                                   Foreground="{StaticResource BrushDoradoUniversidad}"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,4"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="NoWrap" />
-                        <Border Grid.Row="1"
-                                Background="{StaticResource BrushAzulMarino}"
-                                CornerRadius="8">
-                            <Image Source="{Binding CarruselImagenActual}"
-                                   Stretch="Uniform"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        </Border>
-                    </Grid>
-                </Border>
-
-                <!-- Boton Administracion -->
-                <Button Grid.Row="5"
-                        Command="{Binding NavigateToAdministracionCommand}"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
-                        Padding="24,16"
-                        Background="Transparent"
-                        Cursor="Hand">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="A" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                        <TextBlock Text="Administracion" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
-                    </StackPanel>
-                </Button>
-
-                <!-- Boton Salir -->
-                <Button Grid.Row="6"
+                <!-- Abajo: Salir -->
+                <Button Grid.Row="2"
                         Command="{Binding ExitCommand}"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Left"
-                        Padding="24,16"
+                        Padding="16,12"
                         Background="Transparent"
-                        Cursor="Hand">
+                        Cursor="Hand"
+                        Margin="12,0,12,12">
                     <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock Text="X" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrushRojoError}"/>
-                        <TextBlock Text="Salir" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource BrushBlanco}"/>
+                        <Image Source="avares://ChecadorSSSD/Assets/Icons/exit.png" Width="22" Height="22" VerticalAlignment="Center"/>
+                        <TextBlock Text="Salir"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushRojoError}"
+                                   VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </Grid>
         </Border>
 
         <!-- Contenido Principal -->
-        <Border Grid.Column="1" Background="{StaticResource BrushAzulMarino}">
+        <Border Grid.Column="1"
+                Background="{StaticResource BrushAzulMarino}">
             <ContentControl Content="{Binding SelectedViewModel}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"

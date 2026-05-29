@@ -161,6 +161,7 @@ public class ReportesViewModel : ViewModelBase
     }
 
     public bool EsReporteHoras => TipoReporteSeleccionado == "Horas Mensual";
+    public bool EsReporteUsuarios => !EsReporteHoras;
 
     public List<ReporteItem> ResultadosPaginadosHoras => AplicarPaginacion(Filtrar(Ordenar(_reporteHoras).ToList()));
     public List<ReporteDetalleItem> ResultadosPaginadosUsuarios => AplicarPaginacion(Filtrar(Ordenar(_reporteUsuarios).ToList()));
@@ -178,6 +179,10 @@ public class ReportesViewModel : ViewModelBase
 
     public bool MostrarResultadosHoras => MostrarResultados && EsReporteHoras;
     public bool MostrarResultadosUsuarios => MostrarResultados && !EsReporteHoras;
+
+    public string CantidadRegistrosText => EsReporteHoras
+        ? $"Mostrando {ResultadosPaginadosHoras.Count} de {_reporteHoras.Count} registros"
+        : $"Mostrando {ResultadosPaginadosUsuarios.Count} de {_reporteUsuarios.Count} registros";
 
     public ReportesViewModel(ReportesService reportesService)
     {

@@ -7,81 +7,188 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
     <Grid Margin="24">
-        <Grid RowDefinitions="Auto,*">
-            <Grid Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
-                <StackPanel Grid.Column="0" Spacing="4">
-                    <TextBlock Text="Personas" FontSize="24" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
-                    <TextBlock Text="Busqueda de usuarios registrados en el sistema" FontSize="12" Foreground="{StaticResource BrushGrisTextoClaro}"/>
-                </StackPanel>
-                <Grid Grid.Column="1" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
-                    <Image Grid.Column="0" Source="avares://ChecadorSSSD/Assets/icons/search.png" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <TextBox Grid.Column="1"
-                             Text="{Binding Busqueda}"
-                             PlaceholderText="Buscar..."
-                             Width="300"
-                             Height="36"
-                             VerticalContentAlignment="Center"
-                             Background="{StaticResource BrushAzulMarinoClaro}"
-                             Foreground="{StaticResource BrushBlanco}"
-                             CaretBrush="{StaticResource BrushBlanco}"
-                             CornerRadius="6"
-                             Padding="10,0"
-                             FontSize="13"/>
-                </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+            <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="Personas" FontSize="24" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                <TextBlock Text="Busqueda de usuarios registrados en el sistema" FontSize="12" Foreground="{StaticResource BrushGrisTextoClaro}"/>
+            </StackPanel>
+            <Grid Grid.Column="1" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                <Image Grid.Column="0" Source="avares://ChecadorSSSD/Assets/Icons/search.png" Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBox Grid.Column="1"
+                         Text="{Binding Busqueda}"
+                         PlaceholderText="Buscar por nombre o matricula..."
+                         Width="300"
+                         Height="36"
+                         VerticalContentAlignment="Center"
+                         Background="{StaticResource BrushAzulFondoCont}"
+                         BorderBrush="{StaticResource BrushCappuccino}"
+                         BorderThickness="1"
+                         Foreground="{StaticResource BrushBlanco}"
+                         CaretBrush="{StaticResource BrushBlanco}"
+                         CornerRadius="2"
+                         Padding="10,0"
+                         FontSize="13"/>
             </Grid>
+        </Grid>
 
-            <!-- Tabla de personas -->
-            <Border Grid.Row="1" Background="{StaticResource BrushAzulMarinoSidebar}" CornerRadius="12" Padding="0">
-                <Grid RowDefinitions="Auto,*">
-                    <!-- Headers -->
-                    <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" CornerRadius="8,8,0,0" Padding="12,10">
-                        <Grid ColumnDefinitions="*,*,*,Auto">
-                            <TextBlock Grid.Column="0" Text="Nombre completo" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Numero de cuenta" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Rol" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Acciones" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Grid>
-                    </Border>
+        <!-- Tabla de personas -->
+        <Border Grid.Row="1" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="0">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <!-- Headers -->
+                <Border Grid.Row="0" Background="{StaticResource BrushAzulMarinoMedio}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,0,0,1" Padding="12,10">
+                    <Grid ColumnDefinitions="*,*,*,Auto">
+                        <TextBlock Grid.Column="0" Text="Nombre completo" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Matricula" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="Rol" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="Acciones" FontWeight="SemiBold" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
 
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <ListBox ItemsSource="{Binding Personas}" Background="Transparent" BorderThickness="0">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="models:Personas">
-                                    <Border Background="Transparent" Padding="12,10" Margin="0" BorderBrush="{StaticResource BrushAzulMarinoClaro}" BorderThickness="0,0,0,1">
-                                        <Grid ColumnDefinitions="*,*,*,Auto">
-                                            <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding Matricula}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            <Border Grid.Column="2" Background="{StaticResource BrushDoradoUniversidad}" CornerRadius="4" Padding="8,2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                <TextBlock Text="{Binding TipoPersona}" Foreground="{StaticResource BrushNegro}" FontSize="11" FontWeight="SemiBold"/>
-                                            </Border>
-                                            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                                                <Button Content="Ver"
-                                                        Command="{Binding $parent[ItemsControl].DataContext.VerCommand}"
-                                                        CommandParameter="{Binding}"
-                                                        Background="{StaticResource BrushAzulMarinoMedio}"
-                                                        Foreground="{StaticResource BrushBlanco}"
-                                                        Height="28" FontSize="10"
-                                                        Padding="8,0"
-                                                        FontWeight="SemiBold"
-                                                        CornerRadius="4"
-                                                        ToolTip.Tip="Ver detalle"/>
-                                                 <Button Height="28" FontSize="10"
-                                                        Padding="8,0"
-                                                        FontWeight="SemiBold"
-                                                        CornerRadius="4"
-                                                        ToolTip.Tip="Copiar matricula"
-                                                        Background="Transparent">
-                                                        <Image Source="avares://ChecadorSSSD/Assets/icons/copy.png" Width="14" Height="14" />
-                                                </Button>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ListBox ItemsSource="{Binding Personas}" Background="Transparent" BorderThickness="0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:Personas">
+                                <Border Background="Transparent" Padding="12,10" Margin="0" BorderBrush="{StaticResource BrushAzulMarinoClaro}" BorderThickness="0,0,0,1">
+                                    <Grid ColumnDefinitions="*,*,*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding NombreCompleto}" Foreground="{StaticResource BrushBlanco}" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Matricula}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <Border Grid.Column="2" Background="{StaticResource BrushAzulMarino}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="2" Padding="8,2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock Text="{Binding TipoPersona}" Foreground="{StaticResource BrushDoradoUniversidad}" FontSize="11" FontWeight="SemiBold"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                            <Button Command="{Binding $parent[ItemsControl].DataContext.VerCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Background="{StaticResource BrushAzulMarinoMedio}"
+                                                    Foreground="{StaticResource BrushBlanco}"
+                                                    Height="28" FontSize="10"
+                                                    Padding="8,0"
+                                                    FontWeight="SemiBold"
+                                                    CornerRadius="2"
+                                                    ToolTip.Tip="Ver detalle">
+                                                    Ver</Button>
+                                             <Button Height="28" FontSize="10"
+                                                    Padding="8,0"
+                                                    FontWeight="SemiBold"
+                                                    CornerRadius="2"
+                                                    ToolTip.Tip="Copiar matricula"
+                                                    Background="Transparent"
+                                                    Command="{Binding $parent[ItemsControl].DataContext.CopiarMatriculaCommand}"
+                                                    CommandParameter="{Binding}">
+                                                    Copiar</Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+
+                <!-- Paginador -->
+                <Border Grid.Row="2" Background="{StaticResource BrushAzulMarinoMedio}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="0,1,0,0" Padding="8,4">
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="Anterior"
+                                Command="{Binding PaginaAnteriorCommand}"
+                                Padding="8,2"
+                                Background="Transparent"
+                                Foreground="{StaticResource BrushGrisTextoClaro}"
+                                BorderBrush="{StaticResource BrushCappuccino}"
+                                BorderThickness="0"
+                                FontSize="12"/>
+                        <TextBlock Text="{Binding RangoPaginaText}" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,0"/>
+                            <Button Content="Siguiente"
+                                    Command="{Binding PaginaSiguienteCommand}"
+                                    Padding="8,2"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource BrushGrisTextoClaro}"
+                                    BorderBrush="{StaticResource BrushCappuccino}"
+                                    BorderThickness="0"
+                                    FontSize="12"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Modal Inline (Overlay) -->
+        <Border Grid.RowSpan="2"
+                Background="#80000000"
+                IsVisible="{Binding MostrarModal}"
+                Padding="24">
+            <Border Background="{StaticResource BrushAzulFondoCont}"
+                    BorderBrush="{StaticResource BrushCappuccino}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="32"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MaxWidth="500">
+                <Grid RowDefinitions="Auto,*,Auto" DataContext="{Binding PersonaEnModal}">
+                    <TextBlock Grid.Row="0"
+                               Text="DETALLE DE PERSONA"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushDoradoUniversidad}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,20"/>
+                    <Grid Grid.Row="1"
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                          RowSpacing="10">
+                        <!-- FOTO -->
+                        <StackPanel Grid.Row="0" Spacing="4" HorizontalAlignment="Center">
+                            <TextBlock Text="FOTO" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                            <Border Background="{StaticResource BrushAzulMarino}" CornerRadius="2" Width="120" Height="120" HorizontalAlignment="Center">
+                                <Image Source="{Binding Imagen}" Stretch="Uniform" />
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Spacing="4">
+                            <TextBlock Text="Nombre:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Nombre}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Spacing="4">
+                            <TextBlock Text="Apellido Paterno:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding ApellidoPaterno}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Spacing="4">
+                            <TextBlock Text="Apellido Materno:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding ApellidoMaterno}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Spacing="4">
+                            <TextBlock Text="Matricula:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Matricula}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="5" Spacing="4">
+                            <TextBlock Text="Tipo de Persona:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding TipoPersona}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Spacing="4">
+                            <TextBlock Text="ID:" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding IdPersona}" Foreground="{StaticResource BrushBlanco}" FontSize="14"/>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" Margin="0,20,0,0">
+                        <Button Content="  Copiar Matricula  "
+                                Command="{Binding $parent[UserControl].DataContext.CopiarMatriculaCommand}"
+                                CommandParameter="{Binding}"
+                                Padding="12,8"
+                                Background="{StaticResource BrushDoradoUniversidad}"
+                                Foreground="{StaticResource BrushNegro}"
+                                FontWeight="SemiBold"
+                                CornerRadius="2"
+                                HorizontalAlignment="Center"/>
+                        <Button Content="  Cerrar  "
+                                Command="{Binding $parent[UserControl].DataContext.CerrarModalCommand}"
+                                Padding="12,8"
+                                Background="{StaticResource BrushAzulMarinoMedio}"
+                                Foreground="{StaticResource BrushBlanco}"
+                                FontWeight="SemiBold"
+                                CornerRadius="2"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
                 </Grid>
             </Border>
-        </Grid>
+        </Border>
     </Grid>
 </UserControl>

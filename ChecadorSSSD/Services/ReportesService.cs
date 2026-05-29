@@ -29,12 +29,14 @@ public class ReporteDetalleItem
     public string Nombre { get; set; } = string.Empty;
     public string ApellidoPaterno { get; set; } = string.Empty;
     public string ApellidoMaterno { get; set; } = string.Empty;
+    public string Rol { get; set; } = string.Empty;
     public DateTime Fecha { get; set; }
     public string HoraEntrada { get; set; } = string.Empty;
     public string HoraSalida { get; set; } = string.Empty;
     public double HorasDiarias { get; set; } = 0;
     public string ClasificacionHoras { get; set; } = string.Empty;
     public double HorasTrabajadas { get; set; } = 0;
+    public string NombreCompleto => $"{Nombre} {ApellidoPaterno} {ApellidoMaterno}".Trim();
 }
 
 public class ReportesService
@@ -167,6 +169,7 @@ public class ReportesService
                 p.nombre,
                 p.apellido_paterno,
                 p.apellido_materno,
+                p.tipo_persona,
                 a.hora_entrada,
                 a.hora_salida,
                 TIMESTAMPDIFF(SECOND, a.hora_entrada, a.hora_salida) / 3600.0 as horas
@@ -216,6 +219,7 @@ public class ReportesService
                 Nombre = r.Nombre ?? string.Empty,
                 ApellidoPaterno = r.Apellido_paterno ?? string.Empty,
                 ApellidoMaterno = r.Apellido_materno ?? string.Empty,
+                Rol = r.Tipo_persona ?? string.Empty,
                 Fecha = r.Hora_entrada.Date,
                 HoraEntrada = r.Hora_entrada.ToString("HH:mm:ss"),
                 HoraSalida = r.Hora_salida?.ToString("HH:mm:ss") ?? string.Empty,
@@ -247,6 +251,7 @@ public class ReporteDetalleDto
     public string? Nombre { get; set; }
     public string? Apellido_paterno { get; set; }
     public string? Apellido_materno { get; set; }
+    public string? Tipo_persona { get; set; }
     public DateTime Hora_entrada { get; set; }
     public DateTime? Hora_salida { get; set; }
     public double? horas { get; set; }

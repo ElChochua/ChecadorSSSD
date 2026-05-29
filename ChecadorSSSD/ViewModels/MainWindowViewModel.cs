@@ -25,6 +25,36 @@ public class MainWindowViewModel : ViewModelBase
     private List<ImagenCarrusel> _carruselImagenes = new();
     private int _carruselIndice = 0;
 
+    private Bitmap? _logoSidebar;
+
+    public Bitmap? LogoSidebar
+    {
+        get => _logoSidebar;
+        private set => SetProperty(ref _logoSidebar, value);
+    }
+
+    public void CargarLogo()
+    {
+        try
+        {
+            var logoPath = _imageService.LogoChecadorPath;
+            if (!string.IsNullOrWhiteSpace(logoPath))
+            {
+                LogoSidebar = _imageService.LoadImage(logoPath);
+            }
+            else
+            {
+                LogoSidebar = null;
+            }
+        }
+        catch
+        {
+            LogoSidebar = null;
+        }
+    }
+
+    public bool HasLogoSidebar => LogoSidebar != null;
+
     public ViewModelBase? SelectedViewModel
     {
         get => _selectedViewModel;
@@ -83,6 +113,7 @@ public class MainWindowViewModel : ViewModelBase
 
         AppMessenger.ImagesChanged += OnImagesChanged;
 
+        CargarLogo();
         InicializarCarrusel();
     }
 

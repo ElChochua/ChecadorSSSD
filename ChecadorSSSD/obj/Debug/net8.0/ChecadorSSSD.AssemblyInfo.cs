@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChecadorSSSD")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32bc9cdc60f1dbd8fec925c09a15c464569c33fe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3069066f8f3d092399ba4f8df1941b6ce0999f9f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChecadorSSSD")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChecadorSSSD")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
