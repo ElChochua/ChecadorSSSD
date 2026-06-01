@@ -56,4 +56,12 @@ public class PersonasService
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<Personas>> ObtenerPersonasConHuellaAsync()
+    {
+        return await _context.Personas
+            .AsNoTracking()
+            .Where(p => p.Huella != null && p.Huella.Length > 0)
+            .ToListAsync();
+    }
 }

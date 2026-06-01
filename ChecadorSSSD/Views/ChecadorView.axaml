@@ -34,10 +34,6 @@
 
         <!-- Row 1: Imágenes Universidad + Lugar -->
         <Border Grid.Row="1"
-                Background="{StaticResource BrushAzulFondoCont}"
-                BorderBrush="{StaticResource BrushCappuccino}"
-                BorderThickness="1"
-                CornerRadius="4"
                 Padding="16"
                 Margin="0,0,0,16">
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
@@ -80,15 +76,17 @@
                 IsVisible="{Binding MostrarMensaje}"
                 HorizontalAlignment="Stretch">
             <Border Background="{StaticResource BrushAzulFondoCont}">
-                <Border Background="{Binding EsError, StringFormat='#C0392B', FallbackValue='#2E7D32'}"
-                        CornerRadius="4"
-                        Padding="16,12">
+                <Grid>
+                    <Border Background="#2E7D32" CornerRadius="4" Padding="16,12"
+                            IsVisible="{Binding EsError, Converter={StaticResource InverseBoolConverter}}" />
+                    <Border Background="#C0392B" CornerRadius="4" Padding="16,12"
+                            IsVisible="{Binding EsError}" />
                     <TextBlock Text="{Binding Mensaje}"
                                FontSize="14"
                                TextWrapping="Wrap"
                                TextAlignment="Center"
                                Foreground="{StaticResource BrushBlanco}"/>
-                </Border>
+                </Grid>
             </Border>
         </Border>
 
@@ -135,30 +133,42 @@
                         Foreground="{StaticResource BrushNegro}"
                         Margin="0,8,0,0"/>
 
-                <!-- Seccion de huella dactilar en standby -->
+                <!-- Seccion de estado del lector de huella -->
                 <Border Background="{StaticResource BrushAzulMarino}"
                         BorderBrush="{StaticResource BrushCappuccino}"
                         BorderThickness="0,1,0,0"
                         Padding="8,8,8,0"
-                        Margin="0,16,0,0">
+                        Margin="0,40,0,0">
                     <StackPanel Spacing="8" Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="avares://ChecadorSSSD/Assets/Icons/fingerprint.png"
                                Width="20"
                                Height="20"
                                VerticalAlignment="Center" />
-                        <TextBlock Text="Escáner de huella en standby"
+                        <TextBlock Text="{Binding EstadoLector}"
                                    FontSize="13"
                                    Foreground="{StaticResource BrushGrisTextoClaro}"
-                                   HorizontalAlignment="Center">
-                        </TextBlock>
-                        <Border Background="{StaticResource BrushCappuccino}"
+                                   HorizontalAlignment="Center"/>
+                        <!-- Estado activo -->
+                        <Border Background="{StaticResource BrushVerdeExito}"
                                 Padding="12,6"
-                                HorizontalAlignment="Center">
-                            <TextBlock Text="STANDBY"
+                                HorizontalAlignment="Center"
+                                IsVisible="{Binding LectorHuellaConectado}">
+                            <TextBlock Text="ACTIVO"
                                        FontSize="11"
                                        FontWeight="SemiBold"
-                                       Foreground="{StaticResource BrushDoradoUniversidad}">
-                            </TextBlock>
+                                       Foreground="{StaticResource BrushBlanco}"/>
+                        </Border>
+                        <!-- Estado no disponible -->
+                        <Border Background="{StaticResource BrushAzulFondoCont}"
+                                BorderBrush="{StaticResource BrushCappuccino}"
+                                BorderThickness="1"
+                                Padding="12,6"
+                                HorizontalAlignment="Center"
+                                IsVisible="{Binding !LectorHuellaConectado}">
+                            <TextBlock Text="NO DISPONIBLE"
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushGrisTextoClaro}"/>
                         </Border>
                     </StackPanel>
                 </Border>

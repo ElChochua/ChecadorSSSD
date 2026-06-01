@@ -1,77 +1,79 @@
 using System;
-using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
 
 namespace ChecadorSSSD.Services;
 
 /// <summary>
-/// Helper para operaciones de clipboard que usa reflection para ser compatible
-/// con diferentes versiones de la API de Avalonia (incluyendo la 12.X
-/// donde IClipboard.SetTextAsync puede no estar disponible).
+/// Helper para operaciones de clipboard mediante P/Invoke (Windows).
+/// Garantiza compatibilidad independientemente de la versión de Avalonia.
 /// </summary>
 public static class ClipboardHelper
 {
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern bool CloseClipboard();
+
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern bool EmptyClipboard();
+
+    [DllImport("user32.dll", SetLastError = true)]
+    static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern IntPtr GlobalAlloc(uint uFlags, UIntPtr dwBytes);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern IntPtr GlobalLock(IntPtr hMem);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    static extern bool GlobalUnlock(IntPtr hMem);
+
+    const uint GMEM_MOVEABLE = 0x0002;
+    const uint CF_UNICODETEXT = 13;
+
     /// <summary>
-    /// Intenta copiar el texto al portapapeles del sistema.
-    /// Es safe para usar desde cualquier lugar (ViewModels, code-behind, etc.).
+    /// Copia el texto al portapapeles de Windows en formato Unicode.
     /// </summary>
     public static async Task SetTextAsync(string? text)
     {
         if (string.IsNullOrEmpty(text)) return;
 
-        try
+        await Task.Run(() =>
         {
-            // Obtener la ventana principal a través de ApplicationLifetime
-            var lifetime = Application.Current?.ApplicationLifetime;
-            if (lifetime == null) return;
-
-            // Leer propiedad MainWindow vía reflection para evitar dependencia de tipo exacto
-            var mainWindowProperty = lifetime.GetType().GetProperty("MainWindow");
-            var mainWindow = mainWindowProperty?.GetValue(lifetime);
-            if (mainWindow == null) return;
-
-            // Leer propiedad Clipboard vía reflection
-            var clipboardProperty = mainWindow.GetType().GetProperty("Clipboard");
-            var clipboard = clipboardProperty?.GetValue(mainWindow);
-            if (clipboard == null) return;
-
-            // Buscar método SetTextAsync o SetText (soporta ambos)
-            var method = clipboard.GetType().GetMethod("SetTextAsync", new[] { typeof(string) })
-                         ?? clipboard.GetType().GetMethod("SetText", new[] { typeof(string) });
-
-            if (method != null)
+            if (!OpenClipboard(IntPtr.Zero)) return;
+            try
             {
-                var result = method.Invoke(clipboard, new object[] { text });
-                if (result is Task task)
+                if (!EmptyClipboard()) return;
+
+                var buffer = Encoding.Unicode.GetBytes(text + '\0');
+                var hGlobal = GlobalAlloc(GMEM_MOVEABLE, (UIntPtr)buffer.Length);
+                if (hGlobal == IntPtr.Zero) return;
+
+                var ptr = GlobalLock(hGlobal);
+                if (ptr == IntPtr.Zero) return;
+
+                try
                 {
-                    await task;
+                    Marshal.Copy(buffer, 0, ptr, buffer.Length);
                 }
+                finally
+                {
+                    GlobalUnlock(hGlobal);
+                }
+
+                SetClipboardData(CF_UNICODETEXT, hGlobal);
             }
-            else
+            finally
             {
-                // Fallback: usar IDataObject / SetDataObjectAsync si existe
-                var dataObjectType = clipboard.GetType().Assembly.GetType("Avalonia.Input.DataObject");
-                var dataObject = dataObjectType != null 
-                    ? Activator.CreateInstance(dataObjectType) 
-                    : null;
-                
-                if (dataObject != null)
-                {
-                    dataObjectType!.GetMethod("Set", new[] { typeof(string), typeof(object) })?.Invoke(dataObject, new object[] { "text", text });
-                    var setDataMethod = clipboard.GetType().GetMethod("SetDataObjectAsync", new[] { dataObjectType });
-                    if (setDataMethod != null)
-                    {
-                        var result = setDataMethod.Invoke(clipboard, new object[] { dataObject });
-                        if (result is Task task) await task;
-                    }
-                }
+                CloseClipboard();
             }
-        }
-        catch
-        {
-            // Ignorar errores silenciosamente (no es crítico)
-        }
+        });
     }
 }

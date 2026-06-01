@@ -31,7 +31,9 @@ public class AdministradorService
 
     public async Task<List<Administrador>> ObtenerTodosAsync()
     {
-        return await _context.Administradores.ToListAsync();
+        return await _context.Administradores
+            .Include(a => a.Persona)
+            .ToListAsync();
     }
 
     public async Task<Administrador?> ObtenerPorIdAsync(int id)
@@ -86,6 +88,7 @@ public class AdministradorService
         if (existing == null) throw new Exception("Administrador no encontrado.");
 
         existing.Usuario = admin.Usuario;
+        existing.IdPersona = admin.IdPersona;
         // Solo actualizar la contraseña si se proporci� una nueva
         if (!string.IsNullOrEmpty(admin.Contrasenia))
         {

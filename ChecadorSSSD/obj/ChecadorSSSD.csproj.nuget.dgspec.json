@@ -74,6 +74,10 @@
               "target": "Package",
               "version": "[2.1.79, )"
             },
+            "DigitalPersona.dpUruNet": {
+              "target": "Package",
+              "version": "[3.4.4.127, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",

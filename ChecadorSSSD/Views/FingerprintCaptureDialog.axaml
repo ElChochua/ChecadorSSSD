@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+        x:Class="ChecadorSSSD.Views.FingerprintCaptureDialog"
+        x:DataType="vm:FingerprintCaptureViewModel"
+        Title="Captura de Huella"
+        Width="450" Height="300"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20">
+            <PathIcon Data="M12,2C14.09,2 16.09,2.67 17.72,3.84L16.29,5.27C15.11,4.46 13.61,4 12,4A5,5 0 0,0 7,9V14.17L5.71,15.46L5,14.76L5,9A7,7 0 0,1 12,2M12,6A3,3 0 0,1 15,9V11.17L12.83,9A3,3 0 0,0 12,7C10.21,7 9,8.21 9,10V14.76L7,16.76V10A5,5 0 0,1 12,5M17.62,14.3L19.05,12.88L12,5.83L4.95,12.88L6.38,14.3L12,8.68L17.62,14.3Z" 
+                      Width="80" Height="80" 
+                      Foreground="Gray"
+                      IsVisible="{Binding IsCapturing}"/>
+
+            <TextBlock Text="{Binding StatusText}" 
+                       FontSize="18" 
+                       FontWeight="Bold"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="10">
+            <Button Content="Cancelar" 
+                    IsVisible="{Binding IsCapturing}"
+                    Click="CancelButton_Click"
+                    Width="100"/>
+            <Button Content="Aceptar" 
+                    IsVisible="{Binding IsSuccess}"
+                    Click="AcceptButton_Click"
+                    Width="100"/>
+            <Button Content="Reintentar" 
+                    IsVisible="{Binding IsError}"
+                    Click="RetryButton_Click"
+                    Width="100"/>
+        </StackPanel>
+    </Grid>
+</Window>

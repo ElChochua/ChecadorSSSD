@@ -13,6 +13,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     private ViewModelBase? _selectedViewModel;
     private int _selectedIndex = 0;
+    private int _previousIndex = -1;
 
     private readonly ChecadorViewModel _checadorViewModel;
     private readonly PersonasViewModel _personasViewModel;
@@ -164,6 +165,14 @@ public class MainWindowViewModel : ViewModelBase
 
     private void OnSelectedIndexChanged(int index)
     {
+        if (index == _previousIndex) return;
+
+        // Desactivar el lector cuando se SALE de checador
+        if (_previousIndex == 0)
+        {
+            _checadorViewModel.Desactivar();
+        }
+
         SelectedViewModel = index switch
         {
             0 => _checadorViewModel,
@@ -172,6 +181,14 @@ public class MainWindowViewModel : ViewModelBase
             3 => _administracionViewModel,
             _ => _checadorViewModel
         };
+
+        // Activar el lector cuando se ENTRA a checador
+        if (index == 0)
+        {
+            _checadorViewModel.Activar();
+        }
+
+        _previousIndex = index;
     }
 
     private void Salir()

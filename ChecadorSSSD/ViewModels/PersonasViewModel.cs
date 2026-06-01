@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using ChecadorSSSD.Models;
 using ChecadorSSSD.Services;
+using ChecadorSSSD.Views;
 
 namespace ChecadorSSSD.ViewModels;
 
@@ -30,9 +32,8 @@ public class PersonasViewModel : ViewModelBase
     private const int RegistrosPorPagina = 50;
     private int _totalRegistros = 0;
 
-    // Modal inline
-    private Personas? _personaEnModal;
-    private bool _mostrarModal = false;
+    // Ventana modal nueva
+    private Window? _ventanaDetalle;
 
     public List<Personas> Personas
     {
@@ -92,31 +93,11 @@ public class PersonasViewModel : ViewModelBase
     public bool PaginaAnteriorPuedeEjecutarse => _paginaActual > 1;
     public bool PaginaSiguientePuedeEjecutarse => _paginaActual < TotalPaginas;
 
-    // Modal inline
-    public Personas? PersonaEnModal
-    {
-        get => _personaEnModal;
-        set
-        {
-            if (SetProperty(ref _personaEnModal, value))
-            {
-                MostrarModal = _personaEnModal != null;
-            }
-        }
-    }
-
-    public bool MostrarModal
-    {
-        get => _mostrarModal;
-        set => SetProperty(ref _mostrarModal, value);
-    }
-
     // Comandos
     public ICommand VerCommand { get; }
     public ICommand CopiarMatriculaCommand { get; }
     public ICommand PaginaAnteriorCommand { get; }
     public ICommand PaginaSiguienteCommand { get; }
-    public ICommand CerrarModalCommand { get; }
 
     public PersonasViewModel(PersonasService personasService)
     {
@@ -124,7 +105,7 @@ public class PersonasViewModel : ViewModelBase
 
         VerCommand = new RelayCommand<Personas>((persona) =>
         {
-            if (persona != null) PersonaEnModal = persona;
+            if (persona != null) AbrirVentanaDetalle(persona);
         });
 
         CopiarMatriculaCommand = new RelayCommand<Personas>(async (persona) =>
@@ -153,12 +134,41 @@ public class PersonasViewModel : ViewModelBase
             }
         }, () => _paginaActual < TotalPaginas);
 
-        CerrarModalCommand = new RelayCommand(() =>
-        {
-            PersonaEnModal = null;
-        });
-
         _ = CargarPersonasAsync();
+    }
+
+    private void AbrirVentanaDetalle(Personas persona)
+    {
+        try
+        {
+            // Cerrar ventana anterior si existe
+            _ventanaDetalle?.Close();
+
+            var ventana = new VerPersonaView(persona);
+            _ventanaDetalle = ventana;
+
+            // Buscar la ventana principal para usar como owner
+            if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var mainWindow = desktop.MainWindow;
+                if (mainWindow != null)
+                {
+                    ventana.ShowDialog(mainWindow);
+                }
+                else
+                {
+                    ventana.Show();
+                }
+            }
+            else
+            {
+                ventana.Show();
+            }
+        }
+        catch
+        {
+            // Si falla abrir la ventana, simplemente ignorar
+        }
     }
 
     private async Task CargarPersonasAsync()
@@ -213,15 +223,23 @@ public class PersonasViewModel : ViewModelBase
         try
         {
             await ClipboardHelper.SetTextAsync(matricula);
-            Mensaje = "Matricula copiada al portapapeles.";
+            Mensaje = "¡Matrícula copiada exitosamente al portapapeles!";
             EsError = false;
             MostrarMensaje = true;
+            _ = OcultarMensajeAsync();
         }
         catch (Exception ex)
         {
             Mensaje = $"Error al copiar: {ex.Message}";
             EsError = true;
             MostrarMensaje = true;
+            _ = OcultarMensajeAsync();
         }
+    }
+
+    private async Task OcultarMensajeAsync()
+    {
+        await Task.Delay(3000);
+        MostrarMensaje = false;
     }
 }

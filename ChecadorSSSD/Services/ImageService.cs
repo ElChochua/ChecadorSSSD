@@ -15,6 +15,21 @@ public class ImagenCarrusel
 {
     public string Ruta { get; set; } = string.Empty;
     public string Nombre { get; set; } = string.Empty;
+
+    // Propiedad de conveniencia para binding de imagen preview en el carrusel
+    public string? RutaPreview
+    {
+        get
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Ruta)) return null;
+                if (!File.Exists(Ruta)) return null;
+                return Ruta;
+            }
+            catch { return null; }
+        }
+    }
 }
 
 /// <summary>

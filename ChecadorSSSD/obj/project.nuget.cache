@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "deZKlEvFzgQ=",
+  "dgSpecHash": "omTU4ZmXxV0=",
   "success": true,
   "projectFilePath": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\ChecadorSSSD.csproj",
   "expectedPackageFiles": [
@@ -20,6 +20,7 @@
     "C:\\Users\\jossu\\.nuget\\packages\\avalonia.x11\\12.0.3\\avalonia.x11.12.0.3.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\avaloniaui.diagnosticssupport\\2.2.1\\avaloniaui.diagnosticssupport.2.2.1.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\dapper\\2.1.79\\dapper.2.1.79.nupkg.sha512",
+    "C:\\Users\\jossu\\.nuget\\packages\\digitalpersona.dpurunet\\3.4.4.127\\digitalpersona.dpurunet.3.4.4.127.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\harfbuzzsharp\\8.3.1.3\\harfbuzzsharp.8.3.1.3.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\harfbuzzsharp.nativeassets.linux\\8.3.1.3\\harfbuzzsharp.nativeassets.linux.8.3.1.3.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\8.3.1.3\\harfbuzzsharp.nativeassets.macos.8.3.1.3.nupkg.sha512",
@@ -72,5 +73,18 @@
     "C:\\Users\\jossu\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
     "C:\\Users\\jossu\\.nuget\\packages\\tmds.dbus.protocol\\0.92.0\\tmds.dbus.protocol.0.92.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "El paquete \"DigitalPersona.dpUruNet 3.4.4.127\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net8.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "projectPath": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\ChecadorSSSD.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\projects\\ChecadorSSSD\\ChecadorSSSD\\ChecadorSSSD.csproj",
+      "libraryId": "DigitalPersona.dpUruNet",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

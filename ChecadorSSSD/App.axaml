@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ChecadorSSSD.App"
+             xmlns:converters="clr-namespace:ChecadorSSSD.Converters"
              RequestedThemeVariant="Dark">
 
     <Application.Styles>
@@ -42,5 +43,7 @@
         <!-- Brushes para contenedores -->
         <SolidColorBrush x:Key="BrushCappuccino" Color="{StaticResource Cappuccino}" />
         <SolidColorBrush x:Key="BrushAzulFondoCont" Color="{StaticResource AzulFondoCont}" />
+        
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
     </Application.Resources>
 </Application>

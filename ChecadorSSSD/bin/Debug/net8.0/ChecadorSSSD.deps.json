@@ -14,6 +14,7 @@
           "Avalonia.Themes.Fluent": "12.0.3",
           "AvaloniaUI.DiagnosticsSupport": "2.2.1",
           "Dapper": "2.1.79",
+          "DigitalPersona.dpUruNet": "3.4.4.127",
           "Microsoft.EntityFrameworkCore.Design": "8.0.27",
           "Pomelo.EntityFrameworkCore.MySql": "8.0.2"
         },
@@ -254,6 +255,50 @@
           "lib/net8.0/Dapper.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.1.79.29349"
+          }
+        }
+      },
+      "DigitalPersona.dpUruNet/3.4.4.127": {
+        "runtime": {
+          "lib/DPCtlUruNet.dll": {
+            "assemblyVersion": "1.0.0.1",
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/DPCtlXUru.dll": {
+            "assemblyVersion": "1.0.0.1",
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/DPUruNet.dll": {
+            "assemblyVersion": "1.0.0.1",
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/DPXUru.dll": {
+            "assemblyVersion": "1.0.0.1",
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfj.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfpdd.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfpdd_4k.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfpdd_ptapi.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfr6.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpfr7.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/dpuareu_jni.dll": {
+            "fileVersion": "3.4.0.127"
+          },
+          "lib/tfm.dll": {
+            "fileVersion": "3.15.0.327"
           }
         }
       },
@@ -1128,6 +1173,13 @@
       "sha512": "sha512-8YijbzgTfmqmQOnVNorYM6K++pxqnW3nJ4aC1sRHzxUA2CcuoJ9gsTem3kgBnPRMc38zZHl4Esb6hAezXIEEuw==",
       "path": "dapper/2.1.79",
       "hashPath": "dapper.2.1.79.nupkg.sha512"
+    },
+    "DigitalPersona.dpUruNet/3.4.4.127": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-p8qIeHKMCftFPB0KbKgvR+iPbg0vv7Rd/ctB5I8eIECOuPMfvBtMQK3c7cIhGq9/foi2D9R7ynpPXugIKtbXlw==",
+      "path": "digitalpersona.dpurunet/3.4.4.127",
+      "hashPath": "digitalpersona.dpurunet.3.4.4.127.nupkg.sha512"
     },
     "HarfBuzzSharp/8.3.1.3": {
       "type": "package",

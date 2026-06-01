@@ -171,3 +171,15 @@ D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\MySqlConnector.dll
 D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
 D:\projects\ChecadorSSSD\ChecadorSSSD\obj\Debug\net8.0\ChecadorSSSD.sourcelink.json
 D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\Dapper.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\DPCtlUruNet.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\DPCtlXUru.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\DPUruNet.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\DPXUru.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfj.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfpdd.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfpdd_4k.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfpdd_ptapi.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfr6.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpfr7.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\dpuareu_jni.dll
+D:\projects\ChecadorSSSD\ChecadorSSSD\bin\Debug\net8.0\tfm.dll

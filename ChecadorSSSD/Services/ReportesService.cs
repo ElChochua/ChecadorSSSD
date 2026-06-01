@@ -4,9 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
-using ChecadorSSSD.Data;
 using ChecadorSSSD.Models;
 
 namespace ChecadorSSSD.Services;
@@ -60,10 +58,16 @@ public class ReportesService
 
     /// <summary>
     /// Reporte de HORAS (acumulado por persona).
+    /// Basado en query del usuario:
+    /// SELECT p.Matricula, p.Nombre, p.Apellido_paterno, p.Apellido_materno,
+    ///        COUNT(a.id_asistencia) AS Asistencias_totales,
+    ///        SUM(ROUND(TIMESTAMPDIFF(MINUTE, a.hora_entrada, a.hora_salida) / 60.0, 2)) AS Horas_totales
+    /// FROM personas p JOIN asistencias_checador a ON p.id_persona = a.id_persona
+    /// WHERE ... GROUP BY p.id_persona, p.Matricula, p.Nombre, p.Apellido_paterno, p.Apellido_materno
     /// </summary>
     public async Task<(List<ReporteItem> Reporte, bool SeEncontraronRegistros)> GenerarReporteAsync(
-        DateTime fechaInicio, 
-        DateTime fechaFin, 
+        DateTime fechaInicio,
+        DateTime fechaFin,
         TipoPersona? tipoPersona = null,
         List<int>? idsPersonas = null)
     {
@@ -75,11 +79,12 @@ public class ReportesService
                 p.apellido_materno,
                 p.tipo_persona,
                 p.imagen,
-                a.hora_entrada,
-                a.hora_salida
-            FROM asistencias_checador a
-            INNER JOIN personas p ON a.id_persona = p.id_persona
-            WHERE DATE(a.hora_entrada) >= @fechaInicio AND DATE(a.hora_entrada) <= @fechaFin";
+                COUNT(a.id_asistencia) AS asistencias_totales,
+                SUM(ROUND(TIMESTAMPDIFF(MINUTE, a.hora_entrada, a.hora_salida) / 60.0, 2)) AS horas_totales
+            FROM personas p
+            INNER JOIN asistencias_checador a ON p.id_persona = a.id_persona
+            WHERE DATE(a.hora_entrada) >= @fechaInicio AND DATE(a.hora_entrada) <= @fechaFin
+            AND a.hora_salida IS NOT NULL";
 
         var parameters = new DynamicParameters();
         parameters.Add("fechaInicio", fechaInicio.Date, DbType.Date);
@@ -97,69 +102,57 @@ public class ReportesService
             parameters.Add("idsPersonas", idsPersonas);
         }
 
-        sql += " ORDER BY p.matricula, a.hora_entrada";
+        sql += @" GROUP BY p.id_persona, p.matricula, p.nombre, p.apellido_paterno, p.apellido_materno, p.tipo_persona, p.imagen
+                 ORDER BY p.matricula";
 
-        List<AsistenciaReporteDto> registros;
-        using (var connection = await GetConnectionAsync())
-        {
-            registros = (await connection.QueryAsync<AsistenciaReporteDto>(sql, parameters)).ToList();
-        }
+        using var connection = await GetConnectionAsync();
+        var resultados = (await connection.QueryAsync<ReporteHorasDto>(sql, parameters)).ToList();
 
-        if (registros == null || !registros.Any())
+        if (resultados == null || !resultados.Any())
         {
             return (new List<ReporteItem>(), false);
         }
 
-        var reporte = registros
-            .GroupBy(c => c.Matricula)
-            .Select(g =>
+        var reporte = resultados.Select(r =>
+        {
+            // El conteo de asistencias del query ya cuenta cada par entrada/salida.
+            // El usuario dice que asistencias esta en 0 porque cuenta pares.
+            // En este query, asistencias_totales = COUNT(id_asistencia) que cuenta CADA registro.
+            // Como cada asistencia es un par (entrada + salida), asistencias reales = asistencias_totales / 2
+            var asistencias = r.asistencias_totales / 2;
+
+            return new ReporteItem
             {
-                var primerRegistro = g.FirstOrDefault();
-                if (primerRegistro == null) return null!;
-
-                double horasTotales = 0;
-                int parejasValidas = 0;
-                int totalEntradas = g.Count();
-                int totalSalidas = g.Count(x => x.HoraSalida != null || x.HoraSalida != DateTime.MinValue);
-
-                foreach (var registro in g)
-                {
-                    if (registro.HoraSalida != null && registro.HoraSalida != DateTime.MinValue)
-                    {
-                        var dif = registro.HoraSalida.Value - registro.HoraEntrada;
-                        if (dif.TotalHours > 0)
-                        {
-                            horasTotales += dif.TotalHours;
-                            parejasValidas++;
-                        }
-                    }
-                }
-
-                return new ReporteItem
-                {
-                    NombreCompleto = $"{primerRegistro?.Nombre ?? ""} {primerRegistro?.Apellido_paterno ?? ""} {primerRegistro?.Apellido_materno ?? ""}".Trim(),
-                    Matricula = g.Key,
-                    Rol = primerRegistro.Tipo_persona ?? "Sin especificar",
-                    TotalAsistencias = parejasValidas,
-                    TotalEntradas = totalEntradas,
-                    TotalSalidas = totalSalidas,
-                    HorasAcumuladas = Math.Round(horasTotales, 2),
-                    RutaImagen = primerRegistro.Imagen ?? string.Empty
-                };
-            })
-            .Where(r => r != null)
-            .OrderBy(r => r.NombreCompleto)
-            .ToList();
+                NombreCompleto = $"{r.nombre ?? ""} {r.apellido_paterno ?? ""} {r.apellido_materno ?? ""}".Trim(),
+                Matricula = r.matricula ?? string.Empty,
+                Rol = r.tipo_persona ?? "Sin especificar",
+                TotalAsistencias = asistencias,
+                TotalEntradas = asistencias,  // O usar el conteo original si se desea
+                TotalSalidas = asistencias,
+                HorasAcumuladas = Math.Round(r.horas_totales ?? 0, 2),
+                RutaImagen = r.imagen ?? string.Empty
+            };
+        }).ToList();
 
         return (reporte, reporte.Any());
     }
 
     /// <summary>
-    /// Reporte de USUARIOS (detalle por d�a).
+    /// Reporte de USUARIOS (detalle por dia).
+    /// Basado en query del usuario:
+    /// SELECT p.Matricula, p.Nombre, p.Apellido_paterno, p.Apellido_materno,
+    ///        DATE(a.hora_entrada) AS Fecha,
+    ///        TIME(a.hora_entrada) AS Hora_entrada,
+    ///        TIME(a.hora_salida) AS Hora_salida,
+    ///        ROUND(TIMESTAMPDIFF(MINUTE, a.hora_entrada, a.hora_salida) / 60.0, 2) AS Horas_trabajadas
+    /// FROM personas p JOIN asistencias_checador a ON p.id_persona = a.id_persona
+    /// WHERE p.tipo_persona = ... AND a.hora_entrada BETWEEN ... AND ...
+    /// AND (a.hora_salida IS NOT NULL OR estatus <> 'cerrado')
+    /// ORDER BY p.Matricula, a.hora_entrada
     /// </summary>
     public async Task<(List<ReporteDetalleItem> Reporte, bool SeEncontraronRegistros)> GenerarReporteUsuariosAsync(
-        DateTime fechaInicio, 
-        DateTime fechaFin, 
+        DateTime fechaInicio,
+        DateTime fechaFin,
         TipoPersona? tipoPersona = null,
         List<int>? idsPersonas = null)
     {
@@ -170,11 +163,12 @@ public class ReportesService
                 p.apellido_paterno,
                 p.apellido_materno,
                 p.tipo_persona,
-                a.hora_entrada,
-                a.hora_salida,
-                TIMESTAMPDIFF(SECOND, a.hora_entrada, a.hora_salida) / 3600.0 as horas
-            FROM asistencias_checador a
-            INNER JOIN personas p ON a.id_persona = p.id_persona
+                DATE(a.hora_entrada) AS fecha,
+                TIME(a.hora_entrada) AS hora_entrada,
+                TIME(a.hora_salida) AS hora_salida,
+                ROUND(TIMESTAMPDIFF(MINUTE, a.hora_entrada, a.hora_salida) / 60.0, 2) AS horas_trabajadas
+            FROM personas p
+            INNER JOIN asistencias_checador a ON p.id_persona = a.id_persona
             WHERE DATE(a.hora_entrada) >= @fechaInicio AND DATE(a.hora_entrada) <= @fechaFin
             AND a.hora_salida IS NOT NULL";
 
@@ -196,33 +190,36 @@ public class ReportesService
 
         sql += " ORDER BY p.matricula, a.hora_entrada";
 
-        List<ReporteDetalleDto> resultados;
-        using (var connection = await GetConnectionAsync())
+        using var connection = await GetConnectionAsync();
+        var resultados = (await connection.QueryAsync<ReporteUsuarioDto>(sql, parameters)).ToList();
+
+        if (resultados == null || !resultados.Any())
         {
-            resultados = (await connection.QueryAsync<ReporteDetalleDto>(sql, parameters)).ToList();
+            return (new List<ReporteDetalleItem>(), false);
         }
 
         var reporte = resultados.Select(r =>
         {
-            int horasDiarias = (int)Math.Floor(r.horas ?? 0);
+            double horasDiarias = r.horas_trabajadas ?? 0;
+            // Clasificacion basada en horas del dia
             string clasificacion = horasDiarias switch
             {
-                < 10 => "Unidades",
-                < 100 => "Decenas",
-                < 1000 => "Centenas",
-                _ => "Mas de mil horas"
+                < 4 => "Insuficiente",
+                < 8 => "Parcial",
+                < 10 => "Completa",
+                _ => "Extra"
             };
 
             return new ReporteDetalleItem
             {
-                Matricula = r.Matricula ?? string.Empty,
-                Nombre = r.Nombre ?? string.Empty,
-                ApellidoPaterno = r.Apellido_paterno ?? string.Empty,
-                ApellidoMaterno = r.Apellido_materno ?? string.Empty,
-                Rol = r.Tipo_persona ?? string.Empty,
-                Fecha = r.Hora_entrada.Date,
-                HoraEntrada = r.Hora_entrada.ToString("HH:mm:ss"),
-                HoraSalida = r.Hora_salida?.ToString("HH:mm:ss") ?? string.Empty,
+                Matricula = r.matricula ?? string.Empty,
+                Nombre = r.nombre ?? string.Empty,
+                ApellidoPaterno = r.apellido_paterno ?? string.Empty,
+                ApellidoMaterno = r.apellido_materno ?? string.Empty,
+                Rol = r.tipo_persona ?? string.Empty,
+                Fecha = r.fecha,
+                HoraEntrada = r.hora_entrada?.ToString() ?? string.Empty,
+                HoraSalida = r.hora_salida?.ToString() ?? string.Empty,
                 HorasDiarias = horasDiarias,
                 ClasificacionHoras = clasificacion,
                 HorasTrabajadas = horasDiarias
@@ -233,26 +230,29 @@ public class ReportesService
     }
 }
 
-public class AsistenciaReporteDto
+// DTOs para el reporte de horas (acumulado)
+public class ReporteHorasDto
 {
-    public string? Matricula { get; set; }
-    public string? Nombre { get; set; }
-    public string? Apellido_paterno { get; set; }
-    public string? Apellido_materno { get; set; }
-    public string? Tipo_persona { get; set; }
-    public string? Imagen { get; set; }
-    public DateTime HoraEntrada { get; set; }
-    public DateTime? HoraSalida { get; set; }
+    public string? matricula { get; set; }
+    public string? nombre { get; set; }
+    public string? apellido_paterno { get; set; }
+    public string? apellido_materno { get; set; }
+    public string? tipo_persona { get; set; }
+    public string? imagen { get; set; }
+    public int asistencias_totales { get; set; }
+    public double? horas_totales { get; set; }
 }
 
-public class ReporteDetalleDto
+// DTO para el reporte de usuarios (detalle por dia)
+public class ReporteUsuarioDto
 {
-    public string? Matricula { get; set; }
-    public string? Nombre { get; set; }
-    public string? Apellido_paterno { get; set; }
-    public string? Apellido_materno { get; set; }
-    public string? Tipo_persona { get; set; }
-    public DateTime Hora_entrada { get; set; }
-    public DateTime? Hora_salida { get; set; }
-    public double? horas { get; set; }
+    public string? matricula { get; set; }
+    public string? nombre { get; set; }
+    public string? apellido_paterno { get; set; }
+    public string? apellido_materno { get; set; }
+    public string? tipo_persona { get; set; }
+    public DateTime fecha { get; set; }
+    public TimeSpan? hora_entrada { get; set; }
+    public TimeSpan? hora_salida { get; set; }
+    public double? horas_trabajadas { get; set; }
 }

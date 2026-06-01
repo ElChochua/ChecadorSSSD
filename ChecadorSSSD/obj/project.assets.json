@@ -344,6 +344,37 @@
           }
         }
       },
+      "DigitalPersona.dpUruNet/3.4.4.127": {
+        "type": "package",
+        "compile": {
+          "lib/DPCtlUruNet.dll": {},
+          "lib/DPCtlXUru.dll": {},
+          "lib/DPUruNet.dll": {},
+          "lib/DPXUru.dll": {},
+          "lib/dpfj.dll": {},
+          "lib/dpfpdd.dll": {},
+          "lib/dpfpdd_4k.dll": {},
+          "lib/dpfpdd_ptapi.dll": {},
+          "lib/dpfr6.dll": {},
+          "lib/dpfr7.dll": {},
+          "lib/dpuareu_jni.dll": {},
+          "lib/tfm.dll": {}
+        },
+        "runtime": {
+          "lib/DPCtlUruNet.dll": {},
+          "lib/DPCtlXUru.dll": {},
+          "lib/DPUruNet.dll": {},
+          "lib/DPXUru.dll": {},
+          "lib/dpfj.dll": {},
+          "lib/dpfpdd.dll": {},
+          "lib/dpfpdd_4k.dll": {},
+          "lib/dpfpdd_ptapi.dll": {},
+          "lib/dpfr6.dll": {},
+          "lib/dpfr7.dll": {},
+          "lib/dpuareu_jni.dll": {},
+          "lib/tfm.dll": {}
+        }
+      },
       "HarfBuzzSharp/8.3.1.3": {
         "type": "package",
         "dependencies": {
@@ -1862,6 +1893,30 @@
         "lib/netstandard2.0/Dapper.dll",
         "lib/netstandard2.0/Dapper.xml",
         "readme.md"
+      ]
+    },
+    "DigitalPersona.dpUruNet/3.4.4.127": {
+      "sha512": "p8qIeHKMCftFPB0KbKgvR+iPbg0vv7Rd/ctB5I8eIECOuPMfvBtMQK3c7cIhGq9/foi2D9R7ynpPXugIKtbXlw==",
+      "type": "package",
+      "path": "digitalpersona.dpurunet/3.4.4.127",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "EULASDK.md",
+        "digitalpersona.dpurunet.3.4.4.127.nupkg.sha512",
+        "digitalpersona.dpurunet.nuspec",
+        "lib/DPCtlUruNet.dll",
+        "lib/DPCtlXUru.dll",
+        "lib/DPUruNet.dll",
+        "lib/DPXUru.dll",
+        "lib/dpfj.dll",
+        "lib/dpfpdd.dll",
+        "lib/dpfpdd_4k.dll",
+        "lib/dpfpdd_ptapi.dll",
+        "lib/dpfr6.dll",
+        "lib/dpfr7.dll",
+        "lib/dpuareu_jni.dll",
+        "lib/tfm.dll"
       ]
     },
     "HarfBuzzSharp/8.3.1.3": {
@@ -3603,6 +3658,7 @@
       "Avalonia.Themes.Fluent >= 12.0.3",
       "AvaloniaUI.DiagnosticsSupport >= 2.2.1",
       "Dapper >= 2.1.79",
+      "DigitalPersona.dpUruNet >= 3.4.4.127",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.*",
       "Pomelo.EntityFrameworkCore.MySql >= 8.0.2"
     ]
@@ -3681,6 +3737,10 @@
             "target": "Package",
             "version": "[2.1.79, )"
           },
+          "DigitalPersona.dpUruNet": {
+            "target": "Package",
+            "version": "[3.4.4.127, )"
+          },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
@@ -3711,5 +3771,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"DigitalPersona.dpUruNet 3.4.4.127\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\" en lugar de la plataforma de destino del proyecto \"net8.0\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "libraryId": "DigitalPersona.dpUruNet",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

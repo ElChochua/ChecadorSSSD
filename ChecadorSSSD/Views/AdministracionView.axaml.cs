@@ -49,6 +49,30 @@ public partial class AdministracionView : UserControl
         }
     }
 
+    private void ActualizarLogo_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is AdministracionViewModel vm && !string.IsNullOrWhiteSpace(vm.RutaLogo))
+        {
+            vm.GuardarRutaLogo(vm.RutaLogo);
+        }
+    }
+
+    private void ActualizarLugar_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is AdministracionViewModel vm && !string.IsNullOrWhiteSpace(vm.RutaLugar))
+        {
+            vm.GuardarRutaLugar(vm.RutaLugar);
+        }
+    }
+
+    private void ActualizarUniversidad_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is AdministracionViewModel vm && !string.IsNullOrWhiteSpace(vm.RutaUniversidad))
+        {
+            vm.GuardarRutaUniversidad(vm.RutaUniversidad);
+        }
+    }
+
     private async void SeleccionarImagenCarrusel_Click(object? sender, RoutedEventArgs e)
     {
         var path = await SeleccionarImagenAsync();
@@ -56,40 +80,19 @@ public partial class AdministracionView : UserControl
         {
             vm.RutaImagenCarrusel = path;
             vm.NombreImagenCarrusel = System.IO.Path.GetFileNameWithoutExtension(path);
+            // Agregar imagen directamente al carrusel
+            vm.AgregarImagenCarrusel();
         }
     }
 
     private void CarruselItem_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
-        if (sender is Border border && border.DataContext is ImagenCarrusel img &&
-            !string.IsNullOrWhiteSpace(img.Ruta) && System.IO.File.Exists(img.Ruta))
+        if (sender is Border border && border.DataContext is ImagenCarrusel img)
         {
-            try
+            // Eliminar del carrusel al hacer click
+            if (DataContext is AdministracionViewModel vm)
             {
-                var window = new Window
-                {
-                    Title = img.Nombre,
-                    Width = 800,
-                    Height = 600,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    Content = new Avalonia.Controls.ScrollViewer
-                    {
-                        Content = new Avalonia.Controls.Image
-                        {
-                            Source = new Avalonia.Media.Imaging.Bitmap(img.Ruta),
-                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
-                        }
-                    }
-                };
-                var topLevel = TopLevel.GetTopLevel(this) as Window;
-                if (topLevel != null)
-                    window.ShowDialog(topLevel);
-            }
-            catch
-            {
-                // Si falla, intenta abrir con el visor predeterminado del sistema
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(img.Ruta) { UseShellExecute = true });
+                vm.EliminarImagenCarrusel(img);
             }
         }
     }

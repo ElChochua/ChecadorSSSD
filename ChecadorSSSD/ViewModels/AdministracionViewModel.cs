@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Media.Imaging;
 using ChecadorSSSD.Models;
 using ChecadorSSSD.Services;
-using Avalonia.Media.Imaging;
+using ChecadorSSSD.Views;
 
 namespace ChecadorSSSD.ViewModels;
 
@@ -19,6 +22,8 @@ public class AdministracionViewModel : ViewModelBase
     private readonly ReportesService _reportesService;
     private readonly AuthService _authService;
     private readonly ImageService _imageService;
+    private readonly FingerprintReaderService _fingerprintReader;
+    private readonly HuellaDactilarService _huellaDactilarService;
 
     private bool _autenticado = false;
     private string _usuarioLogin = string.Empty;
@@ -60,9 +65,16 @@ public class AdministracionViewModel : ViewModelBase
     private string _rutaImagenCarrusel = string.Empty;
     private List<ImagenCarrusel> _imagenesCarrusel = new();
 
+    // Imagenes - vistas previas de logos
+    private string? _vistaPreviaLogo = null;
+    private string? _vistaPreviaLugar = null;
+    private string? _vistaPreviaLogoUniversidad = null;
+
     private string _mensaje = string.Empty;
     private bool _esError;
     private bool _mostrarMensaje;
+    private string _estadoHuellaText = "Sin capturar";
+
 
     public bool Autenticado
     {
@@ -96,7 +108,7 @@ public class AdministracionViewModel : ViewModelBase
 
     public string TituloFormulario => ModoEdicionAdmin ? "Editar Persona" : "Agregar Persona";
 
-    public List<string> TiposUsuario => new() { "Brigadista", "Asesor", "Personal Administrativo" };
+    public List<string> TiposUsuario => new() { "Brigadista", "Asesor", "Empleado" };
 
     // Personas
     public List<Personas> Personas
@@ -290,25 +302,71 @@ public class AdministracionViewModel : ViewModelBase
     public string RutaLogo
     {
         get => _rutaLogo;
-        set => SetProperty(ref _rutaLogo, value);
+        set
+        {
+            if (SetProperty(ref _rutaLogo, value))
+            {
+                VistaPreviaLogo = _imageService.LoadImage(value) != null ? value : null;
+            }
+        }
     }
 
     public string RutaLugar
     {
         get => _rutaLugar;
-        set => SetProperty(ref _rutaLugar, value);
+        set
+        {
+            if (SetProperty(ref _rutaLugar, value))
+            {
+                VistaPreviaLugar = _imageService.LoadImage(value) != null ? value : null;
+            }
+        }
     }
 
     public string RutaUniversidad
     {
         get => _rutaUniversidad;
-        set => SetProperty(ref _rutaUniversidad, value);
+        set
+        {
+            if (SetProperty(ref _rutaUniversidad, value))
+            {
+                VistaPreviaLogoUniversidad = _imageService.LoadImage(value) != null ? value : null;
+            }
+        }
     }
+
+    // Vistas previas de logos
+    public string? VistaPreviaLogo
+    {
+        get => _vistaPreviaLogo;
+        set => SetProperty(ref _vistaPreviaLogo, value);
+    }
+
+    public bool HasVistaPreviaLogo => !string.IsNullOrEmpty(VistaPreviaLogo);
+
+    public string? VistaPreviaLugar
+    {
+        get => _vistaPreviaLugar;
+        set => SetProperty(ref _vistaPreviaLugar, value);
+    }
+
+    public bool HasVistaPreviaLugar => !string.IsNullOrEmpty(VistaPreviaLugar);
+
+    public string? VistaPreviaLogoUniversidad
+    {
+        get => _vistaPreviaLogoUniversidad;
+        set => SetProperty(ref _vistaPreviaLogoUniversidad, value);
+    }
+
+    public bool HasVistaPreviaLogoUniversidad => !string.IsNullOrEmpty(VistaPreviaLogoUniversidad);
 
     public void GuardarRutaLogo(string path)
     {
         RutaLogo = path;
         _imageService.SetLogoChecador(path);
+        VistaPreviaLogo = path;
+        OnPropertyChanged(nameof(VistaPreviaLogo));
+        OnPropertyChanged(nameof(HasVistaPreviaLogo));
         AppMessenger.NotifyImagesChanged();
     }
 
@@ -316,6 +374,9 @@ public class AdministracionViewModel : ViewModelBase
     {
         RutaLugar = path;
         _imageService.SetImagenLugar(path);
+        VistaPreviaLugar = path;
+        OnPropertyChanged(nameof(VistaPreviaLugar));
+        OnPropertyChanged(nameof(HasVistaPreviaLugar));
         AppMessenger.NotifyImagesChanged();
     }
 
@@ -323,6 +384,9 @@ public class AdministracionViewModel : ViewModelBase
     {
         RutaUniversidad = path;
         _imageService.SetImagenUniversidad(path);
+        VistaPreviaLogoUniversidad = path;
+        OnPropertyChanged(nameof(VistaPreviaLogoUniversidad));
+        OnPropertyChanged(nameof(HasVistaPreviaLogoUniversidad));
         AppMessenger.NotifyImagesChanged();
     }
 
@@ -366,9 +430,11 @@ public class AdministracionViewModel : ViewModelBase
                 AdminEnEdicion = new Administrador
                 {
                     IdAdmin = value.IdAdmin,
+                    IdPersona = value.IdPersona,
                     Usuario = value.Usuario,
                     Contrasenia = string.Empty
                 };
+                PersonaSeleccionadaAdmin = PersonasDisponiblesAdmin.FirstOrDefault(p => p.IdPersona == value.IdPersona);
                 ModoEdicionAdminCrud = true;
             }
         }
@@ -439,23 +505,35 @@ public class AdministracionViewModel : ViewModelBase
 
     private readonly AdministradorService _adminService;
 
+    public string EstadoHuellaText
+    {
+        get => _estadoHuellaText;
+        set => SetProperty(ref _estadoHuellaText, value);
+    }
+
+    public ICommand CapturarHuellaCommand { get; }
+
     public AdministracionViewModel(
         PersonasService personasService,
         ReportesService reportesService,
         AdministradorService adminService,
-        AuthService authService)
+        AuthService authService,
+        FingerprintReaderService fingerprintReader,
+        HuellaDactilarService huellaDactilarService)
     {
         _personasService = personasService;
         _reportesService = reportesService;
         _adminService = adminService;
         _authService = authService;
+        _fingerprintReader = fingerprintReader;
+        _huellaDactilarService = huellaDactilarService;
         _imageService = new ImageService();
 
         PersonasFiltradasReporte = new List<Personas>();
         PersonasSeleccionadasReporte = new List<Personas>();
 
         LoginCommand = new RelayCommand(async () => await LoginAsync());
-        LogoutCommand = new RelayCommand(() => { Autenticado = false; MensajeLogin = string.Empty; });
+        LogoutCommand = new RelayCommand(() => { Autenticado = false; MensajeLogin = string.Empty; UsuarioLogin = string.Empty; PassLogin = string.Empty; });
         
         // Aliases para XAML
         EditarCommand = new RelayCommand<Personas>(p => { if (p != null) PersonaSeleccionada = p; });
@@ -498,6 +576,7 @@ public class AdministracionViewModel : ViewModelBase
             if (a != null) AdminSeleccionado = a;
         });
         CancelarAdminCommand = new RelayCommand(() => { AdminEnEdicion = new Administrador(); ModoEdicionAdminCrud = false; });
+        CapturarHuellaCommand = new RelayCommand(async () => await CapturarHuellaAsync());
 
         // Obtenemos las administradores guardados
         RutaLogo = _imageService.LogoChecadorPath;
@@ -514,6 +593,10 @@ public class AdministracionViewModel : ViewModelBase
             MensajeLogin = string.Empty;
             await CargarPersonasAdminAsync();
             await CargarAdministradoresAsync();
+            PersonasDisponiblesAdmin = new List<Personas>(_todasLasPersonas);
+            
+            PersonasSeleccionadasReporte = new List<Personas>();
+            PersonasFiltradasReporte = new List<Personas>(_todasLasPersonas);
         }
         else
         {
@@ -545,8 +628,8 @@ public class AdministracionViewModel : ViewModelBase
         var f = BusquedaAdmin.ToLower();
         Personas = _todasLasPersonas.Where(p =>
             p.Nombre.ToLower().Contains(f) ||
-            p.ApellidoPaterno.ToLower().Contains(f) ||
-            p.ApellidoMaterno.ToLower().Contains(f) ||
+            (p.ApellidoPaterno ?? "").ToLower().Contains(f) ||
+            (p.ApellidoMaterno ?? "").ToLower().Contains(f) ||
             p.Matricula.ToLower().Contains(f))
             .ToList();
     }
@@ -604,16 +687,14 @@ public class AdministracionViewModel : ViewModelBase
 
     private void FiltrarPersonasReporte()
     {
-        if (string.IsNullOrWhiteSpace(BusquedaPersonasReporte))
-        {
-            PersonasFiltradasReporte = new List<Personas>(_todasLasPersonas);
-            return;
-        }
-        var f = BusquedaPersonasReporte.ToLower();
-        PersonasFiltradasReporte = _todasLasPersonas.Where(p =>
-            p.Nombre.ToLower().Contains(f) ||
-            p.Matricula.ToLower().Contains(f))
-            .ToList();
+        var seleccionadosIds = PersonasSeleccionadasReporte.Select(p => p.IdPersona).ToList();
+        var baseList = string.IsNullOrWhiteSpace(BusquedaPersonasReporte)
+            ? _todasLasPersonas
+            : _todasLasPersonas.Where(p =>
+                p.Nombre.ToLower().Contains(BusquedaPersonasReporte!.ToLower()) ||
+                p.Matricula.ToLower().Contains(BusquedaPersonasReporte!.ToLower()));
+
+        PersonasFiltradasReporte = baseList.Where(p => !seleccionadosIds.Contains(p.IdPersona)).ToList();
     }
 
     public void AgregarPersonaReporte(Personas persona)
@@ -622,6 +703,7 @@ public class AdministracionViewModel : ViewModelBase
         {
             PersonasSeleccionadasReporte = new List<Personas>(PersonasSeleccionadasReporte) { persona };
             OnPropertyChanged(nameof(PersonasSeleccionadasReporte));
+            FiltrarPersonasReporte();
         }
     }
 
@@ -629,6 +711,7 @@ public class AdministracionViewModel : ViewModelBase
     {
         PersonasSeleccionadasReporte = PersonasSeleccionadasReporte.Where(p => p.IdPersona != persona.IdPersona).ToList();
         OnPropertyChanged(nameof(PersonasSeleccionadasReporte));
+        FiltrarPersonasReporte();
     }
 
     private async Task GenerarReporteIndividualAsync()
@@ -699,7 +782,7 @@ public class AdministracionViewModel : ViewModelBase
         }
     }
 
-    private void AgregarImagenCarrusel()
+    public void AgregarImagenCarrusel()
     {
         if (string.IsNullOrWhiteSpace(RutaImagenCarrusel) || string.IsNullOrWhiteSpace(NombreImagenCarrusel))
         {
@@ -715,7 +798,7 @@ public class AdministracionViewModel : ViewModelBase
         MostrarExito("Imagen de carrusel agregada.");
     }
 
-    private void EliminarImagenCarrusel(ImagenCarrusel item)
+    public void EliminarImagenCarrusel(ImagenCarrusel item)
     {
         var lista = _imageService.ObtenerImagenesCarrusel();
         var indice = lista.FindIndex(i => i.Ruta == item.Ruta && i.Nombre == item.Nombre);
@@ -764,6 +847,22 @@ public class AdministracionViewModel : ViewModelBase
         MostrarMensaje = true;
     }
 
+    // Personas disponibles para vincular con administradores
+    private List<Personas> _personasDisponiblesAdmin = new();
+    private Personas? _personaSeleccionadaAdmin;
+
+    public List<Personas> PersonasDisponiblesAdmin
+    {
+        get => _personasDisponiblesAdmin;
+        set => SetProperty(ref _personasDisponiblesAdmin, value);
+    }
+
+    public Personas? PersonaSeleccionadaAdmin
+    {
+        get => _personaSeleccionadaAdmin;
+        set => SetProperty(ref _personaSeleccionadaAdmin, value);
+    }
+
     // Administradores CRUD
     public async Task CargarAdministradoresAsync()
     {
@@ -786,6 +885,12 @@ public class AdministracionViewModel : ViewModelBase
                 MostrarError("El usuario es obligatorio.");
                 return;
             }
+            if (PersonaSeleccionadaAdmin == null)
+            {
+                MostrarError("Debe seleccionar una persona.");
+                return;
+            }
+            AdminEnEdicion.IdPersona = PersonaSeleccionadaAdmin.IdPersona;
             if (ModoEdicionAdminCrud)
             {
                 await _adminService.ActualizarAsync(AdminEnEdicion);
@@ -797,6 +902,7 @@ public class AdministracionViewModel : ViewModelBase
                 MostrarExito("Administrador creado.");
             }
             AdminEnEdicion = new Administrador();
+            PersonaSeleccionadaAdmin = null;
             ModoEdicionAdminCrud = false;
             await CargarAdministradoresAsync();
         }
@@ -823,6 +929,71 @@ public class AdministracionViewModel : ViewModelBase
         catch (Exception ex)
         {
             MostrarError($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task CapturarHuellaAsync()
+    {
+        try
+        {
+            if (PersonaEnEdicion == null)
+            {
+                MostrarError("No hay persona seleccionada para capturar la huella.");
+                return;
+            }
+
+            if (!_fingerprintReader.IsAvailable)
+            {
+                string resultado = _fingerprintReader.Initialize();
+                if (!_fingerprintReader.IsAvailable)
+                {
+                    MostrarError($"No se pudo inicializar el lector: {resultado}");
+                    return;
+                }
+            }
+
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
+            {
+                var dialog = new FingerprintCaptureDialog();
+                var captureVm = new FingerprintCaptureViewModel(_fingerprintReader);
+                dialog.Initialize(captureVm);
+
+                // Store the result from the dialog
+                bool? resultadoDialog = await dialog.ShowDialog<bool?>(desktop.MainWindow);
+
+                if (resultadoDialog == true && captureVm.CapturedFmd != null)
+                {
+                    EstadoHuellaText = "Procesando huella...";
+                    byte[]? fmd = captureVm.CapturedFmd;
+
+                    var resultadoGuardado = await _huellaDactilarService.GuardarHuellaAsync(PersonaEnEdicion.Matricula, fmd);
+
+                    if (!resultadoGuardado.exito)
+                    {
+                        EstadoHuellaText = $"Error al guardar: {resultadoGuardado.mensaje}";
+                        MostrarError(EstadoHuellaText);
+                        return;
+                    }
+
+                    PersonaEnEdicion.Huella = fmd;
+                    EstadoHuellaText = "Huella registrada correctamente.";
+                    MostrarExito(resultadoGuardado.mensaje);
+                }
+                else
+                {
+                    EstadoHuellaText = "Captura cancelada.";
+                }
+            }
+            else
+            {
+                EstadoHuellaText = "Error: No se pudo abrir el diálogo de captura.";
+                MostrarError(EstadoHuellaText);
+            }
+        }
+        catch (Exception ex)
+        {
+            EstadoHuellaText = "Error: " + ex.Message;
+            MostrarError($"Error al capturar la huella: {ex.Message}");
         }
     }
 }

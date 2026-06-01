@@ -68,7 +68,7 @@ public class ReportesViewModel : ViewModelBase
         }
     }
 
-    public List<string> TiposUsuario => new() { "Todos", "Brigadista", "Asesor", "Personal Administrativo", "Empleado" };
+    public List<string> TiposUsuario => new() { "Todos", "Brigadista", "Asesor", "Empleado" };
     public List<string> TiposReporte => new() { "Horas Mensual", "Usuarios Mensual" };
 
     public string Busqueda

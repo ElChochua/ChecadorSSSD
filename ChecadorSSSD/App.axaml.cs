@@ -62,6 +62,12 @@ public partial class App : Application
         services.AddScoped<ChecadorService>();
         services.AddScoped<ReportesService>(_ => new ReportesService(connection));
 
+        // Fingerprint reader service
+        services.AddSingleton<FingerprintReaderService>();
+
+        // Huella dactilar service (Singleton para uso en ViewModels)
+        services.AddSingleton<HuellaDactilarService>();
+
         // ViewModels
         services.AddSingleton<PersonasViewModel>();
         services.AddSingleton<ReportesViewModel>();
