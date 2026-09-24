@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.Views.ConfirmacionDialog"
+        Title="Confirmar accion"
+        Width="460" Height="240"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{StaticResource BrushAzulMarino}">
+
+    <Grid Margin="28" RowDefinitions="Auto,*,Auto">
+        <!-- Header: icono + titulo -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="14" Margin="0,0,0,8">
+            <Border Background="{StaticResource BrushRojoError}"
+                    CornerRadius="28"
+                    Width="48" Height="48"
+                    VerticalAlignment="Center">
+                <TextBlock Text="!"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource BrushBlanco}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+            <TextBlock x:Name="TituloText"
+                       Text="Confirmar accion"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource BrushDoradoUniversidad}"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Mensaje -->
+        <TextBlock Grid.Row="1"
+                   x:Name="MensajeText"
+                   Text="Esta seguro?"
+                   FontSize="14"
+                   Foreground="{StaticResource BrushBlanco}"
+                   TextWrapping="Wrap"
+                   VerticalAlignment="Center"
+                   Margin="0,4,0,12"/>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+            <Button x:Name="CancelarBtn"
+                    Content="Cancelar"
+                    Click="CancelarBtn_Click"
+                    Width="120" Height="40"
+                    Background="{StaticResource BrushAzulMarinoMedio}"
+                    BorderBrush="{StaticResource BrushCappuccino}"
+                    BorderThickness="1"
+                    Foreground="{StaticResource BrushBlanco}"
+                    CornerRadius="2"
+                    FontWeight="SemiBold"/>
+            <Button x:Name="AceptarBtn"
+                    Content="Eliminar"
+                    Click="AceptarBtn_Click"
+                    Width="120" Height="40"
+                    Background="{StaticResource BrushRojoError}"
+                    Foreground="{StaticResource BrushBlanco}"
+                    CornerRadius="2"
+                    FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>

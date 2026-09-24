@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.Views.DatabaseConnectionDialog"
+        Title="Configurar conexión a MySQL"
+        Width="620"
+        Height="660"
+        MinWidth="560"
+        MinHeight="620"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Background="{StaticResource BrushFondo}">
+
+    <Grid Margin="30" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,20">
+            <TextBlock Text="Conexión a la base de datos"
+                       FontSize="24"
+                       FontWeight="SemiBold" />
+            <TextBlock Text="La aplicación seguirá abierta aunque MySQL no esté disponible. Corrige los datos y prueba la conexión."
+                       Classes="muted"
+                       FontSize="13"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Border Grid.Row="1"
+                Background="{StaticResource BrushErrorSuave}"
+                BorderBrush="{StaticResource BrushRojoError}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="14"
+                Margin="0,0,0,18">
+            <TextBlock x:Name="ConnectionErrorText"
+                       Foreground="{StaticResource BrushTextoPrincipal}"
+                       FontSize="12"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Grid Grid.Row="2"
+              ColumnDefinitions="150,*"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+              ColumnSpacing="14"
+              RowSpacing="12">
+            <TextBlock Grid.Row="0" Text="Servidor" VerticalAlignment="Center" Classes="muted" />
+            <TextBox x:Name="ServerTextBox" Grid.Row="0" Grid.Column="1" PlaceholderText="localhost o dirección IP" />
+
+            <TextBlock Grid.Row="1" Text="Puerto" VerticalAlignment="Center" Classes="muted" />
+            <TextBox x:Name="PortTextBox" Grid.Row="1" Grid.Column="1" PlaceholderText="3306" />
+
+            <TextBlock Grid.Row="2" Text="Base de datos" VerticalAlignment="Center" Classes="muted" />
+            <TextBox x:Name="DatabaseTextBox" Grid.Row="2" Grid.Column="1" PlaceholderText="subdireccion_ss_urn" />
+
+            <TextBlock Grid.Row="3" Text="Usuario" VerticalAlignment="Center" Classes="muted" />
+            <TextBox x:Name="UserTextBox" Grid.Row="3" Grid.Column="1" PlaceholderText="Usuario de MySQL" />
+
+            <TextBlock Grid.Row="4" Text="Contraseña" VerticalAlignment="Center" Classes="muted" />
+            <TextBox x:Name="PasswordTextBox" Grid.Row="4" Grid.Column="1" PasswordChar="*" PlaceholderText="Contraseña de MySQL" />
+        </Grid>
+
+        <Border Grid.Row="3"
+                Background="{StaticResource BrushSuperficie}"
+                BorderBrush="{StaticResource BrushBorde}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12"
+                Margin="0,18,0,18">
+            <TextBlock x:Name="TestStatusText"
+                       Text="Modifica los datos y presiona Probar conexión."
+                       Classes="muted"
+                       FontSize="12"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Grid Grid.Row="4" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+            <Button x:Name="ContinueOfflineButton"
+                    Content="Continuar sin conexión"
+                    Classes="secondary"
+                    Click="ContinueOffline_Click"
+                    HorizontalAlignment="Left" />
+            <Button x:Name="TestButton"
+                    Grid.Column="1"
+                    Content="Probar conexión"
+                    Classes="secondary"
+                    Click="TestConnection_Click" />
+            <Button x:Name="SaveButton"
+                    Grid.Column="2"
+                    Content="Guardar y reiniciar"
+                    Classes="primary"
+                    Click="SaveAndRestart_Click" />
+        </Grid>
+    </Grid>
+</Window>

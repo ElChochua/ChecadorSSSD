@@ -1,0 +1,3 @@
+[submodule "Huellas_Driver_And_SDK/Digital-Persona-SDK"]
+	path = Huellas_Driver_And_SDK/Digital-Persona-SDK
+	url = https://github.com/jeffreybulanadi/Digital-Persona-SDK.git

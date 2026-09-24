@@ -1,0 +1,163 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.Views.VerPersonaView"
+        xmlns:models="clr-namespace:ChecadorSSSD.Models"
+        x:DataType="models:Personas"
+        Title="Detalle de Persona"
+        Width="720"
+        Height="780"
+        Background="{StaticResource BrushAzulMarino}"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+
+    <Grid RowDefinitions="*,Auto" Margin="28,24,28,24">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="20">
+
+                <!-- Header tipo tarjeta: foto circular + nombre + matricula + tipo -->
+                <Border Background="{StaticResource BrushAzulFondoCont}"
+                        BorderBrush="{StaticResource BrushCappuccino}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="24"
+                        BoxShadow="0 2 8 0 #80000000">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <!-- Foto circular REAL -->
+                        <Border Grid.Column="0"
+                                Width="140" Height="140"
+                                CornerRadius="70"
+                                Background="{StaticResource BrushAzulMarinoClaro}"
+                                BorderBrush="{StaticResource BrushCappuccino}"
+                                BorderThickness="2"
+                                ClipToBounds="True"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                            <Image Name="FotoImagen" Stretch="UniformToFill"/>
+                        </Border>
+
+                        <!-- Info principal -->
+                        <StackPanel Grid.Column="1" Spacing="8" Margin="22,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding NombreCompleto}"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       TextWrapping="Wrap"/>
+
+                            <!-- Badge matricula -->
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                <TextBlock Text="Matricula"
+                                           FontSize="12"
+                                           Foreground="{StaticResource BrushGrisTextoClaro}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Border Background="{StaticResource BrushAzulMarino}"
+                                        BorderBrush="{StaticResource BrushCappuccino}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        Padding="10,4">
+                                    <TextBlock Text="{Binding Matricula}"
+                                               FontSize="16"
+                                               Foreground="{StaticResource BrushDoradoUniversidad}"
+                                               FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Badge tipo -->
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                <TextBlock Text="Rol"
+                                           FontSize="12"
+                                           Foreground="{StaticResource BrushGrisTextoClaro}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Border Background="{StaticResource BrushDoradoUniversidad}"
+                                        CornerRadius="4"
+                                        Padding="10,4">
+                                    <TextBlock Text="{Binding TipoPersona}"
+                                               FontSize="13"
+                                               Foreground="{StaticResource BrushNegro}"
+                                               FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Seccion de datos personales -->
+                <Border Background="{StaticResource BrushAzulFondoCont}"
+                        BorderBrush="{StaticResource BrushCappuccino}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="20">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="14">
+                        <TextBlock Grid.Row="0"
+                                   Text="Datos personales"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource BrushDoradoUniversidad}"
+                                   Margin="0,0,0,2"/>
+
+                        <Border Grid.Row="1" Background="{StaticResource BrushCappuccino}" Height="1" Opacity="0.5"/>
+
+                        <!-- Apellido Paterno -->
+                        <StackPanel Grid.Row="2" Spacing="4">
+                            <TextBlock Text="Apellido Paterno"
+                                       Foreground="{StaticResource BrushGrisTextoClaro}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding ApellidoPaterno}"
+                                       FontSize="18"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Border Grid.Row="3" Background="{StaticResource BrushCappuccino}" Height="1" Opacity="0.5"/>
+
+                        <!-- Apellido Materno -->
+                        <StackPanel Grid.Row="4" Spacing="4">
+                            <TextBlock Text="Apellido Materno"
+                                       Foreground="{StaticResource BrushGrisTextoClaro}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding ApellidoMaterno}"
+                                       FontSize="18"
+                                       Foreground="{StaticResource BrushBlanco}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Botones + feedback inline -->
+        <Grid Grid.Row="1" RowDefinitions="Auto" Margin="0,16,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                <Button Click="CopiarMatricula_Click"
+                        Padding="16,10"
+                        Background="{StaticResource BrushDoradoUniversidad}"
+                        Foreground="{StaticResource BrushNegro}"
+                        FontWeight="SemiBold"
+                        CornerRadius="8"
+                        HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                        <Image Source="avares://ChecadorSSSD/Assets/Icons/fingerprint.png" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="CopiarBtnTexto" Text="Copiar Matricula" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button IsDefault="True"
+                        IsCancel="True"
+                        Padding="16,10"
+                        Background="{StaticResource BrushAzulMarinoClaro}"
+                        Foreground="{StaticResource BrushBlanco}"
+                        FontWeight="SemiBold"
+                        CornerRadius="8"
+                        HorizontalAlignment="Center"
+                        Click="Cerrar_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                        <Image Source="avares://ChecadorSSSD/Assets/Icons/exit.png" Width="20" Height="20" VerticalAlignment="Center"/>
+                        <TextBlock Text="Cerrar" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

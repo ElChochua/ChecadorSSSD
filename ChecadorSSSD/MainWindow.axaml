@@ -1,0 +1,233 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        xmlns:vm="clr-namespace:ChecadorSSSD.ViewModels"
+        xmlns:views="clr-namespace:ChecadorSSSD.Views"
+        Title="Checador SSSD"
+        WindowState="FullScreen"
+        Background="{StaticResource BrushFondo}"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="272,*">
+        <Border Grid.Column="0"
+                Background="{StaticResource BrushFondoProfundo}"
+                BorderBrush="{StaticResource BrushBorde}"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto,Auto,*,Auto">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="44,*"
+                      Margin="20,20,20,16">
+                    <Button Width="40"
+                            Height="40"
+                            MinHeight="40"
+                            Padding="0"
+                            CornerRadius="10"
+                            Background="{StaticResource BrushAcentoSuave}"
+                            BorderBrush="{StaticResource BrushBorde}"
+                            BorderThickness="1"
+                            Command="{Binding NavigateToChecadorCommand}"
+                            ToolTip.Tip="Ir a inicio">
+                        <Grid>
+                            <Image Source="{Binding LogoSidebar}"
+                                   Width="26"
+                                   Height="26"
+                                   Stretch="Uniform"
+                                   IsVisible="{Binding LogoSidebar, Converter={StaticResource NullToBoolConverter}}" />
+                            <TextBlock Text="C"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushAcento}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsVisible="{Binding LogoSidebar, Converter={StaticResource NullToBoolConverter}, ConverterParameter=true}" />
+                        </Grid>
+                    </Button>
+                    <StackPanel Grid.Column="1"
+                                Margin="12,1,0,0"
+                                VerticalAlignment="Center"
+                                Spacing="1">
+                        <TextBlock Text="Checador SSSD"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushTextoPrincipal}" />
+                        <TextBlock Text="Control de asistencia"
+                                   FontSize="11"
+                                   Classes="muted" />
+                    </StackPanel>
+                </Grid>
+
+                <Border Grid.Row="1"
+                        Classes="surface"
+                        Padding="10"
+                        Margin="16,0,16,20"
+                        Height="154"
+                        PointerPressed="CarruselSidebar_PointerPressed"
+                        Cursor="Hand">
+                    <Grid RowDefinitions="*,Auto">
+                        <Border Grid.Row="0"
+                                Background="{StaticResource BrushFondo}"
+                                CornerRadius="8"
+                                ClipToBounds="True">
+                            <Grid>
+                                <Image Source="{Binding CarruselImagenActual}"
+                                       Stretch="Uniform"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch" />
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Spacing="5"
+                                            IsVisible="{Binding CarruselImagenActual, Converter={StaticResource NullToBoolConverter}, ConverterParameter=true}">
+                                    <TextBlock Text="SSSD"
+                                               FontSize="22"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource BrushAcento}" />
+                                    <TextBlock Text="Espacio institucional"
+                                               FontSize="11"
+                                               Classes="muted" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <TextBlock Grid.Row="1"
+                                   Text="Comunicados"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushTextoSecundario}"
+                                   Margin="2,8,2,0" />
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="2"
+                            Margin="16,0"
+                            Spacing="6">
+                    <TextBlock Text="NAVEGACIÓN"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               LetterSpacing="1.2"
+                               Classes="muted"
+                               Margin="12,0,0,6" />
+
+                    <Button Classes="nav"
+                            Command="{Binding NavigateToChecadorCommand}">
+                        <Grid ColumnDefinitions="3,28,*">
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource BrushAcento}"
+                                    CornerRadius="2"
+                                    IsVisible="{Binding SelectedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=0}" />
+                            <Image Grid.Column="1"
+                                   Source="avares://ChecadorSSSD/Assets/Icons/clock.png"
+                                   Width="20"
+                                   Height="20"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2"
+                                       Text="Checador"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button Classes="nav"
+                            Command="{Binding NavigateToPersonasCommand}">
+                        <Grid ColumnDefinitions="3,28,*">
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource BrushAcento}"
+                                    CornerRadius="2"
+                                    IsVisible="{Binding SelectedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=1}" />
+                            <Image Grid.Column="1"
+                                   Source="avares://ChecadorSSSD/Assets/Icons/people.png"
+                                   Width="20"
+                                   Height="20"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2"
+                                       Text="Personas"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button Classes="nav"
+                            Command="{Binding NavigateToReportesCommand}">
+                        <Grid ColumnDefinitions="3,28,*">
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource BrushAcento}"
+                                    CornerRadius="2"
+                                    IsVisible="{Binding SelectedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=2}" />
+                            <Image Grid.Column="1"
+                                   Source="avares://ChecadorSSSD/Assets/Icons/chart.png"
+                                   Width="20"
+                                   Height="20"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2"
+                                       Text="Reportes"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button Classes="nav"
+                            Command="{Binding NavigateToAdministracionCommand}">
+                        <Grid ColumnDefinitions="3,28,*">
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource BrushAcento}"
+                                    CornerRadius="2"
+                                    IsVisible="{Binding SelectedIndex, Converter={StaticResource IndexEqualsConverter}, ConverterParameter=3}" />
+                            <Image Grid.Column="1"
+                                   Source="avares://ChecadorSSSD/Assets/Icons/settings.png"
+                                   Width="20"
+                                   Height="20"
+                                   Margin="8,0,0,0"
+                                   VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2"
+                                       Text="Administración"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+
+                <Border Grid.Row="3"
+                        BorderBrush="{StaticResource BrushBorde}"
+                        BorderThickness="0,1,0,0"
+                        Margin="16,14,16,16"
+                        Padding="0,14,0,0">
+                    <Button Classes="nav"
+                            Command="{Binding ExitCommand}"
+                            Foreground="{StaticResource BrushError}">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Image Source="avares://ChecadorSSSD/Assets/Icons/exit.png"
+                                   Width="20"
+                                   Height="20" />
+                            <TextBlock Text="Salir" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Background="{StaticResource BrushFondo}">
+            <ContentControl Content="{Binding SelectedViewModel}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Padding="30">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="vm:ChecadorViewModel">
+                        <views:ChecadorView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:PersonasViewModel">
+                        <views:PersonasView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:ReportesViewModel">
+                        <views:ReportesView />
+                    </DataTemplate>
+                    <DataTemplate DataType="vm:AdministracionViewModel">
+                        <views:AdministracionView />
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,13 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="TextBox.custom">
+        <Setter Property="Background" Value="{StaticResource BrushAzulMarinoMedio}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushBlanco}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource BrushBlanco}"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="16,12"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushAzulMarinoClaro}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+</Styles>

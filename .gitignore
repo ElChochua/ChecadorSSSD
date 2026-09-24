@@ -1,0 +1,20 @@
+# IDE state
+.vs/
+.idea/
+*.user
+*.suo
+
+# .NET build output
+**/bin/
+**/obj/
+**/artifacts/
+publish/
+redist/
+**/Redist/
+
+# Local runtime files
+**/appconfig.json
+*.log
+
+# Local agent/session files
+**/session-*.md

@@ -1,0 +1,107 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ChecadorSSSD.Views.NuevoPersonaDialog"
+        Title="Nueva Persona"
+        Width="480" Height="520"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{StaticResource BrushAzulMarino}">
+    
+    <Grid Margin="24" RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Header -->
+        <TextBlock Grid.Row="0" 
+                   Text="Agregar Nueva Persona" 
+                   FontSize="22" FontWeight="Bold"
+                   Foreground="{StaticResource BrushDoradoUniversidad}"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,16"/>
+
+        <!-- Banner de error de validacion -->
+        <Border Grid.Row="1"
+                x:Name="ErrorBanner"
+                Background="#A52C21"
+                CornerRadius="4"
+                Padding="12,8"
+                Margin="0,0,0,12"
+                IsVisible="False">
+            <TextBlock x:Name="ErrorText"
+                       Text=""
+                       FontSize="13"
+                       Foreground="{StaticResource BrushBlanco}"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+        </Border>
+
+        <!-- Formulario -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="12">
+                <!-- Nombre -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Nombre *" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" FontWeight="Medium"/>
+                    <TextBox x:Name="NombreTextBox" PlaceholderText="Ingrese el nombre" Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Apellidos -->
+                <Grid ColumnDefinitions="*,*" Margin="0,0,0,0">
+                    <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                        <TextBlock Text="Apellido Paterno *" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" FontWeight="Medium"/>
+                        <TextBox x:Name="ApellidoPaternoTextBox" PlaceholderText="Apellido paterno" Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="4" Margin="8,0,0,0">
+                        <TextBlock Text="Apellido Materno" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" FontWeight="Medium"/>
+                        <TextBox x:Name="ApellidoMaternoTextBox" PlaceholderText="Apellido materno" Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Matricula -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Matricula *" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" FontWeight="Medium"/>
+                    <TextBox x:Name="MatriculaTextBox" PlaceholderText="Ingrese la matricula" Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Tipo -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Tipo *" Foreground="{StaticResource BrushGrisTextoClaro}" FontSize="12" FontWeight="Medium"/>
+                <ComboBox x:Name="TipoComboBox" Height="36" Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" Padding="10,0" VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="Brigadista" IsSelected="True"/>
+                    <ComboBoxItem Content="Asesor"/>
+                    <ComboBoxItem Content="Empleado"/>
+                </ComboBox>
+                </StackPanel>
+
+                <!-- Separador -->
+                <Border Background="{StaticResource BrushCappuccino}" Height="1" Margin="0,8"/>
+
+                <!-- Foto de Persona -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Foto de Persona (Opcional)" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                    <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="12">
+                        <StackPanel Spacing="8">
+                            <Border Background="{StaticResource BrushAzulMarino}" CornerRadius="2" Height="120" HorizontalAlignment="Stretch">
+                                <Image x:Name="FotoPreview" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False"/>
+                            </Border>
+                            <Button x:Name="SeleccionarFotoBtn" Content="Seleccionar Foto" Click="SeleccionarFotoBtn_Click" Height="36" Padding="16,0" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Left" IsEnabled="True"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Huella Dactilar -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Huella Dactilar (Opcional)" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushDoradoUniversidad}"/>
+                    <Border Background="{StaticResource BrushAzulFondoCont}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" CornerRadius="4" Padding="12">
+                        <StackPanel Spacing="8">
+                            <TextBlock x:Name="EstadoHuellaText" Text="Sin Capturar" Foreground="{StaticResource BrushBlanco}" FontSize="13" VerticalAlignment="Center"/>
+                            <Button x:Name="CapturarHuellaBtn" Content="Capturar Huella" Click="CapturarHuellaBtn_Click" Height="36" Padding="16,0" Background="{StaticResource BrushVerdeExito}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold" HorizontalAlignment="Left" IsEnabled="True"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12" Margin="0,16,0,0">
+            <Button x:Name="CancelBtn" Content="Cancelar" Click="CancelBtn_Click" Width="120" Height="40" Background="{StaticResource BrushAzulMarinoMedio}" BorderBrush="{StaticResource BrushCappuccino}" BorderThickness="1" Foreground="{StaticResource BrushBlanco}" CornerRadius="2" FontWeight="SemiBold"/>
+            <Button x:Name="GuardarBtn" Content="Guardar" Click="GuardarBtn_Click" Width="120" Height="40" Background="{StaticResource BrushDoradoUniversidad}" Foreground="{StaticResource BrushNegro}" CornerRadius="2" FontWeight="SemiBold"/>
+        </StackPanel>
+    </Grid>
+</Window>
